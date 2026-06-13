@@ -1,4 +1,4 @@
-name: 🌾 Daily LSTM Irrigation Prediction
+name: Daily LSTM Irrigation Prediction
 
 on:
   schedule:
