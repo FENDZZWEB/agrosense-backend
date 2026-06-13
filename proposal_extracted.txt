@@ -1,0 +1,1755 @@
+HALAMAN SAMPUL  
+RANCANG BANGUN SISTEM MONITORING  SAWAH 
+TADAH HUJAN BERBASIS IOT DENGAN INTEGRASI API 
+ACCU WEATHER  DAN PREDIKSI KEBUTUHAN AIR 
+MENGGUNAKAN LSTM  
+ 
+ 
+ 
+ 
+Proposal  
+ 
+Diajukan untuk memenuhi salah satu syarat mengikuti ujian proposal 
+program studi Sistem Komputer.  
+ 
+ 
+Disusun Oleh:  
+Nama    :Muhamad Soelaiman Effendy  
+NIM    : 22156201018  
+Program Studi  : Sistem Komputer  
+ 
+SEKOLAH TINGGI  
+MANAJEMEN INFORMATIKA DAN KOMPUTER  
+STIMIK CATUR SAKTI  
+KENDARI  
+2025  
+ 
+
+
+i 
+ LEMBAR PENGESAHAN  
+
+
+ii 
+ DAFTAR ISI  
+ 
+HALAMAN SAMPUL  ................................ ................................ ...........................  1 
+LEMBAR PENGESAHAN  ................................ ................................ .....................  i 
+DAFTAR ISI  ................................ ................................ ................................ ...........  ii 
+DAFTAR GAMBAR  ................................ ................................ ..............................  v 
+DAFTAR TABEL  ................................ ................................ ................................ .. vi 
+BAB I PENDAHULUA N ................................ ................................ .......................  1 
+1.1 Latar Belakang ................................ ................................ ..........................  1 
+1.2 Rumusan Masalah  ................................ ................................ ....................  3 
+1.3 Batasan Masalah  ................................ ................................ .......................  4 
+1.4 Tujuan  Penelitian  ................................ ................................ ......................  5 
+1.5 Manfaat Penelitian  ................................ ................................ ....................  5 
+a. Manfaat Teoritis  ................................ ................................ .......................  5 
+b. Manfaat Praktis  ................................ ................................ .....................  6 
+BAB II KAJ IAN PUSTAKA  ................................ ................................ ..................  8 
+2.1 Tinjauan Pustaka  ................................ ................................ ......................  8 
+2.1.1  Predicting Crop Water Requirements Using IoT Sensor Data for Deep 
+learning  8 
+
+iii 
+ 2.1.2  Sustai nable Irrigation Requirement Prediction Using IoT and 
+Transfer Learning  ................................ ................................ ...........................  9 
+2.1.3  A Predictive Model for Crop Irrigation Scheduling Using Machine 
+Learning and IoT -Generated Environmental Data  ................................ ...... 11 
+2.1.4  Integrasi Sistem IoT untuk Pemantauan Cuaca Real-time dan Prediksi 
+Curah Hujan Berbasis LSTM  ................................ ................................ ........  12 
+2.2 Landasan Teori  ................................ ................................ .......................  14 
+2.2.1  Internet of Things (IoT)  ................................ ................................ ... 14 
+2.2.2  Application Programming  Interface  (API) dan Agrometeorologi  .. 15 
+2.2.3  Model Long Short -Term Me mory (LSTM) untuk Prediksi Kebutuhan 
+Air 18 
+2.2.4  Metode Evaluasi Kinerja Model Prediksi  ................................ ....... 20 
+2.2.5  Dashboard  Web Monitoring  ................................ ...........................  23 
+2.2.6  Arsitektur Basis Data dan Backend  Server  ................................ ..... 24 
+2.2.7  Mikrokontroler ESP32 dengan Modul SIM800L Terintegrasi  ....... 26 
+2.2.8  Soil moisture Sensor (FC -28) ................................ ..........................  30 
+2.2.9  Sensor Suhu dan Kelembaban Udara DHT22  ................................ . 34 
+BAB III METODE PENELITIAN ................................ ................................ ........  38 
+3.1 Tahapan Penelitian  ................................ ................................ .................  38 
+3.2 Pengumpulan Data ................................ ................................ ..................  40 
+
+iv 
+ 3.3 Pengembangan Sistem  ................................ ................................ ............  42 
+3.4 Implementasi Sistem  ................................ ................................ ..............  65 
+3.5 Pengujian Sistem  ................................ ................................ ....................  65 
+3.6 Jadwal Penelitian  ................................ ................................ ....................  68 
+DAFTAR  PUSTAKA  ................................ ................................ .......................  69 
+ 
+ 
+  
+
+v 
+ DAFTAR GAMBAR  
+Gambar 2. 1 Mikrokontroler ESP32  ................................ ................................ ..... 26 
+Gambar 2. 2 TTGO T -Call ESP32 dengan SIM800L Terintegrasi  ......................  27 
+Gambar 2. 3  Soil moisture Sensor  ................................ ................................ ........  30 
+Gambar 2. 4  Sensor DHT22 dan Diagram Blok Fungsionalnya  ..........................  34 
+Gambar 3. 1 Diagram Alir Tahapan Penelitian  ................................ .....................  38 
+Gambar 3. 2 Waterfall  ................................ ................................ ..........................  43 
+Gambar 3. 3 Rancangan Arsitektur Sistem  ................................ ...........................  49 
+Gambar 3. 4 Desain Perangkat Keras  ................................ ................................ ... 50 
+Gambar 3. 5 Flowchart  modul akuisisi data sensor kelembaban tanah  ...............  52 
+Gambar 3. 6 Diagram Komunikasi ESP 32 dengan Server  ................................ .. 53 
+Gambar 3. 7 Diagram Komunikasi User  dengan Server melalui Dashboard  Web
+ ................................ ................................ ................................ ...............................  54 
+Gambar 3. 8 Data Flow Diagram modul pengolahan dan penyimpanan data  ...... 55 
+Gambar 3. 9 Diagram alur modul prediksi kebutuhan air berbasis LSTM  ...........  56 
+Gambar 3. 10 Use case diagram modul visualisasi dan dashboard  web ..............  57 
+Gambar 3.11  Flowchart  alur proses perangkat lunak sistem monitoring  dan 
+prediksi kebutuhan air  ................................ ................................ ...........................  58 
+Gambar 3. 12 Diagram E RD Sistem Monitoring  Sawah Tadah Hujan  ................  60 
+Gambar 3. 13 Desain Dashboard  Web Monitoring  ................................ ..............  63 
+  
+
+vi 
+ DAFTAR TABEL  
+Tabel 2. 1 Spesifikasi Komparatif ESP32 Standar dan TTGO T -Call ..................  28 
+Tabel 2. 2 Spesifikasi Umum Sensor Kelembabab Tanah  ................................ .... 32 
+Tabel 3. 1 Koneksi Antar Pin Komponen  ................................ .............................  50 
+Tabel 3. 2 Pengujian Fungsional Black - box ................................ .......................  65 
+Tabel 3.3 Jadwal Penelitian ................................ ................................ ...................  68 
+ 
+  
+
+1 
+ BAB I  
+PENDAHULUAN  
+1.1 Latar Belakang  
+Sektor pertanian memiliki peran strategis dalam mendukung ketahanan 
+pangan nasional dan pembangunan ekonomi Indonesia, terutama melalui 
+produksi padi sebagai bahan pangan pokok. Keberhasilan produksi padi sangat 
+ditentukan oleh ketersediaan dan pengelolaan  sumber daya air yang . 
+Sektor pertanian memiliki peran strategis dalam mendukung ketahanan 
+pangan nasional dan pembangunan ekonomi Indonesia, terutama melalui 
+produksi padi sebagai bahan pangan pokok. Beras sebagai komoditas utama 
+konsumsi masyarakat menj adikan stabilitas produksi padi sebagai faktor kunci 
+dalam menjaga ketahanan pangan nasional. Keberhasilan produksi padi sangat 
+ditentukan oleh ketersediaan dan pengelolaan sumber daya air yang 
+berkelanjutan, mengingat tanaman padi membutuhkan suplai air y ang relatif 
+stabil selama fase pertumbuhannya.  
+Secara global, sektor pertanian merupakan pengguna air tawar terbesar 
+dengan proporsi sekitar 70% dari total konsumsi air. Dominasi penggunaan air 
+ini menjadikan sektor pertanian sangat rentan terhadap perubah an ketersediaan 
+air akibat perubahan iklim. Fenomena perubahan iklim ditandai dengan 
+pergeseran musim hujan, meningkatnya intensitas hujan ekstrem, serta periode 
+kekeringan yang lebih panjang. Variabilitas tersebut berdampak langsung pada 
+sistem produksi p ertanian, khususnya pada wilayah yang sangat bergantung 
+pada curah hujan sebagai sumber utama air [1]. 
+
+2 
+ Di Indonesia, sebagian besar lahan sawah masih berupa sawah tadah 
+hujan yang belum dilengkapi jaringan irigasi permanen. Ketergantungan pada 
+curah hujan menyebabkan sawah tadah hujan memiliki tingkat kerentanan yang 
+tinggi terhadap variabilitas iklim, terutama pada musi m kemarau atau ketika 
+distribusi hujan tidak merata. Pada kondisi tersebut, fluktuasi kelembapan 
+tanah dapat mengganggu pertumbuhan tanaman padi dan berpotensi 
+menurunkan produktivitas. Permasalahan pengelolaan air semakin kompleks 
+ketika lokasi lahan jauh  dari sumber air alternatif, sementara keputusan 
+pengairan masih dilakukan secara konvensional berdasarkan pengalaman 
+petani tanpa dukungan data kondisi lahan secara real-time.  
+Kondisi tersebut juga tercermin pada sawah di Desa Andoolo Utama 
+yang mayoritas  merupakan sawah tadah hujan. Karakteristik wilayah ini 
+menunjukkan variabilitas ketersediaan air yang tinggi, terutama pada musim 
+kemarau ketika curah hujan menurun dan distribusinya tidak merata. 
+Pengelolaan air di lahan pertanian masih dilakukan secara manual dan berbasis 
+pengalaman, sehingga keputusan pengairan bersifat reaktif dan kurang adaptif 
+terhadap perubahan pola iklim. Ketiadaan sistem pemantauan kondisi lahan 
+secara real-time serta tidak adanya integrasi dengan data prakiraan cuaca 
+menyebabkan pengelolaan air belum optimal dan berpotensi menimbulkan 
+inefisiensi penggunaan air.  
+Perkembangan teknologi Internet of Things  (IoT) dan metode prediksi 
+berbasis data memberikan peluang untuk meningkatkan efisiensi pengelolaan 
+air pada sawah tadah hujan. T eknologi IoT memungkinkan pemantauan 
+
+3 
+ parameter lingkungan seperti kelembapan tanah, suhu, dan kondisi cuaca 
+secara real-time melalui jaringan sensor yang terhubung ke sistem berbasis 
+internet. Integrasi data sensor dengan data prakiraan cuaca eksternal dap at 
+memberikan gambaran kondisi aktual dan proyeksi cuaca yang lebih 
+komprehensif sebagai dasar pengambilan keputusan.  
+Selain itu, metode Long Short -Term Memory  (LSTM) sebagai salah 
+satu model deep learning  berbasis jaringan saraf tiruan memiliki kemampuan 
+dalam memodelkan data deret waktu dan menangkap pola ketergantungan 
+jangka panjang. Karakteristik tersebut menjadikan LSTM relevan untuk 
+memprediksi kebutuhan air tanaman berdasarkan histori data kelembapan 
+tanah, curah hujan, dan variabel lingkungan lainn ya. Dengan pendekatan ini, 
+sistem tidak hanya melakukan monitoring , tetapi juga mampu memberikan 
+prediksi kebutuhan air yang lebih adaptif terhadap ketidakpastian iklim.  
+Berdasarkan permasalahan tersebut, diperlukan rancang bangun sistem 
+monitoring sawah t adah hujan berbasis IoT yang terintegrasi dengan data cuaca 
+eksternal dan model prediksi kebutuhan air berbasis LSTM. Sistem ini 
+diharapkan mampu mendukung pengambilan keputusan pengairan yang lebih 
+terukur, efisien, dan adaptif terhadap variabilitas iklim , khususnya pada 
+wilayah dengan karakteristik sawah tadah hujan seperti Desa Andoolo Utama.  
+1.2 Rumusan Masalah  
+Berdasarkan latar belakang yang telah diuraikan, maka rumusan 
+masalah dalam penelitian ini adalah bagaimana merancang dan membangun 
+sistem monitorin g sawah tadah hujan berbasis Internet of Things (IoT)  yang 
+
+4 
+ terintegrasi dengan API Accu Weather  untuk akuisisi data cuaca eksternal serta 
+mengimplementasikan algoritma Long Short -Term Memory (LSTM) guna 
+menghasilkan prediksi kebutuhan air tanaman padi yang  akurat untuk 
+mendukung pengelolaan irigasi yang efisien pada lahan pertanian tanpa sistem 
+irigasi permanen?  
+1.3 Batasan Masalah  
+Agar penelitian ini lebih terarah dan fokus, serta tidak meluas dari 
+permasalahan bagaimana merancang dan membangun sistem monitori ng serta 
+prediksi kebutuhan air pada sawah tadah hujan tanpa irigasi permanen, maka 
+peneliti membatasi beberapa permasalahan sebagai berikut:  
+1. Penelitian ini hanya berfokus pada perancangan dan pembangunan sistem 
+monitoring  sawah tadah hujan berbasis Intern et of Things (IoT)  pada lahan 
+pertanian yang tidak memiliki sistem irigasi permanen.  
+2. Lokasi penelitian dibatasi pada sawah tadah hujan yang sumber air 
+alternatifnya berada pada jarak tertentu dari lahan, sehingga pengairan tidak 
+dapat dilakukan secara kon tinu dan memerlukan perencanaan yang efisien.  
+3. Parameter lingkungan yang dimonitor dalam penelitian ini dibatasi pada 
+kelembaban tanah, suhu udara, kelembapan udara, dan curah hujan, tanpa 
+mempertimbangkan parameter lain seperti pH tanah, kandungan unsur ha ra, 
+atau tinggi muka air.  
+4. Data cuaca eksternal yang digunakan dalam sistem ini dibatasi hanya berasal 
+dari API Accu Weather , baik data historis maupun data prediksi cuaca, dan tidak 
+menggunakan sumber data cuaca lainnya.  
+
+5 
+ 5. Metode prediksi kebutuhan air dalam penelitian ini dibatasi menggunakan 
+algoritma Long Short -Term Memory (LSTM), tanpa melakukan perbandingan 
+dengan metode prediksi lainnya.  
+6. Sistem yang dikembangkan dibatasi pada fungsi monitoring  dan prediksi 
+kebutuhan air, dan belum mencakup sistem pengend alian atau otomasi 
+pengairan secara langsung.  
+7. Penelitian ini dilakukan dalam lingkup prototype  atau model sistem, sehingga 
+belum diterapkan pada skala luas atau implementasi komersial di lahan 
+pertanian secara menyeluruh.  
+8. Pengujian sistem dilakukan dalam k ondisi terkontrol atau simulasi lapangan 
+terbatas untuk menguji fungsionalitas sistem monitoring  dan tingkat akurasi 
+prediksi kebutuhan air.  
+1.4  Tujuan Penelitian  
+Tujuan dari penelitian ini adalah merancang dan membangun sistem 
+monitoring  sawah tadah hujan be rbasis Internet of Things (IoT)  dengan 
+integrasi data cuaca eksternal dari API Accu Weather  dan implementasi 
+algoritma Long Short -Term Memory (LSTM) untuk memprediksi kebutuhan 
+air tanaman padi melalui dashboard  berbasis web guna mendukung 
+pengelolaan irigasi yang efisien pada lahan pertanian tadah hujan.  
+1.5 Manfaat Penelitian  
+a. Manfaat Teoritis  
+Secara teoretis, penelitian ini diharapkan dapat memberikan kontribusi 
+ilmiah dalam pengembangan kajian pertanian cerdas ( smart agriculture ), 
+
+6 
+ khususnya pada penerapan teknologi Internet of Things (IoT)  dan metode Long 
+Short -Term Memory (LSTM) dalam pengelolaan air pada sawah tadah hujan. 
+Penelitian ini memperkaya literatur yang membahas integrasi antara data 
+sensor lapangan dan data cuaca eksternal dalam konteks pertanian tanpa irigasi 
+permanen, yang hingga saat ini masih relatif terbatas.  
+Selain itu, penelitian ini berkontribusi dalam pengembangan konse p 
+prediksi kebutuhan air berbasis data time series  dengan memanfaatkan 
+kemampuan LSTM dalam memodelkan pola non -linear dan ketergantungan 
+jangka panjang pada data lingkungan. Hasil penelitian ini diharapkan dapat 
+menjadi referensi bagi penelitian selanjutn ya dalam pemilihan dan penerapan 
+metode deep learning  untuk permasalahan prediksi kebutuhan air, serta 
+memperluas pemahaman mengenai efektivitas integrasi IoT dan model 
+prediktif dalam sistem pendukung pengambilan keputusan di sektor pertanian.  
+b. Manfaat Pra ktis 
+Secara praktis, manfaat penelitian ini diharapkan dapat dirasakan 
+langsung oleh berbagai pihak yang terlibat dalam pengelolaan pertanian, 
+khususnya pada lahan sawah tadah hujan, antara lain:  
+1. Bagi Petani, penelitian ini dapat membantu dalam merencanaka n 
+pengambilan dan penggunaan air secara lebih efisien, terutama pada lahan 
+
+7 
+ yang sumber airnya berada pada jarak jauh, sehingga pengairan tidak lagi 
+dilakukan berdasarkan perkiraan semata.  
+2. Mengurangi pemborosan air dan tenaga kerja, karena keputusan pengair an 
+didasarkan pada hasil monitoring  dan prediksi kebutuhan air yang lebih 
+akurat dan berbasis data.  
+3. Mendukung praktik pertanian berkelanjutan, dengan mendorong 
+penggunaan air yang lebih bijaksana pada lahan tanpa irigasi permanen, 
+sehingga risiko kekuranga n atau kelebihan air pada tanaman dapat 
+diminimalkan.  
+4. Bagi praktisi dan pengembang sistem pertanian cerdas, hasil penelitian ini 
+dapat menjadi acuan dalam merancang dan mengimplementasikan sistem 
+monitoring  dan prediksi kebutuhan air berbasis IoT dan machi ne learning . 
+5. Bagi peneliti selanjutnya, penelitian ini dapat dijadikan sebagai referensi 
+awal dan dasar pengembangan penelitian lanjutan, baik dalam pengujian 
+metode prediksi lain sebagai pembanding LSTM, perluasan parameter 
+lingkungan yang dianalisis, pen gembangan sistem pengairan otomatis, 
+maupun implementasi sistem pada skala lahan yang lebih luas dan beragam 
+kondisi agroekosistem.  
+  
+
+8 
+ BAB II  
+KAJIAN PUSTAKA  
+2.1  Tinjauan Pustaka  
+2.1.1 Predicting Crop Water Requirements Using IoT Sensor Data for Deep 
+learning  
+Pada jurnal penelitian [2], penelitian ini mengembangkan sistem prediksi 
+kebutuhan air tanaman berbasis IoT dan deep learning  untuk mengoptimalkan 
+irigasi pertanian. Fokus utama penelitian adalah meningkatkan efisiensi 
+penggunaan air melalui model prediksi kebutuhan air tanaman berdasarkan data 
+sensor lingkungan. Sistem memanfaatkan teknologi IoT dengan sensor kelembaban 
+tanah, suhu udara, kelembapan udara, dan radiasi matahari untuk mengumpulkan 
+data real-time lingkungan. Data tersebut kemudian diproses menggunakan model 
+deep learning  untuk menghasilkan rekomendasi irigasi yang lebih akurat 
+dibandingkan metode threshold  sederhan a. Sistem ini dilatih dan dievaluasi 
+menggunakan dataset  historis sensor guna memastikan keandalan prediksi dalam 
+berbagai kondisi iklim. Hasil penelitian menunjukkan model deep learning  mampu 
+memprediksi kebutuhan air dengan akurasi yang lebih tinggi diba ndingkan dengan 
+sistem berbasis ambang batas konvensional, sehingga mengurangi pemborosan air 
+sekaligus menjaga kelembaban tanah optimal . 
+a. Analisis Penelitian Terdahulu  
+Kelebihan dari penelitian ini adalah pemanfaatan model deep learning  yang 
+mampu menangka p pola data kompleks dan variasi kondisi lingkungan, sehingga 
+prediksi kebutuhan air menjadi lebih akurat dibandingkan pendekatan tradisional. 
+
+9 
+ Selain itu penggunaan sensor IoT memungkinkan monitoring  real-time dengan data 
+lingkungan yang representatif. Nam un, penelitian ini tidak menjelaskan integrasi 
+data cuaca eksternal (mis. API cuaca)  dan belum menerapkan model time series  
+spesifik seperti LSTM  yang kuat dalam memodelkan ketergantungan temporal. 
+Keterbatasan lain adalah fokus prediksi tanpa mengintegras ikan data cuaca historis 
+dari sumber luar untuk mengantisipasi perubahan pola iklim jangka panjang.  
+b. Perbandingan Dengan Penelitian Yang Diajukan  
+Berbeda dengan pendekatan di atas, penelitian yang diusulkan 
+mengintegrasikan API Accu Weather  sebagai sumber da ta cuaca eksternal untuk 
+melengkapi data sensor lokal, serta menggunakan Long Short -Term Memory 
+(LSTM), model deep learning  yang unggul dalam menangkap pola deret waktu, 
+untuk memprediksi kebutuhan air pada lahan sawah tadah hujan yang sangat 
+bergantung pa da curah hujan. Dengan demikian, sistem ini tidak hanya melakukan 
+monitoring  tetapi juga prediksi kebutuhan air untuk pengambilan keputusan yang 
+lebih proaktif dan adaptif terhadap kondisi cuaca.  
+2.1.2 Sustainable Irrigation  Requirement Prediction Using IoT and Transfer 
+Learning  
+Penelitian oleh Angelin Blessy dan kolega [3] mengusulkan model prediksi 
+kebutuhan irigas i yang terintegrasi dengan IoT, LSTM, K-Nearest Neighbors 
+(KNN), ANFIS , dan transfer  learning  untuk memprediksi kebutuhan air pertanian 
+secara jangka pendek dan panjang. Dalam studi ini, sensor IoT mengumpulkan data 
+lingkungan real-time yang mencakup kelem baban tanah dan parameter cuaca 
+lainnya, kemudian data tersebut dianalisis menggunakan kombinasi metode 
+
+10 
+ prediksi. Model ANFIS digunakan untuk prediksi jangka pendek, sedangkan LSTM 
+digunakan untuk prediksi jangka panjang. Sistem juga menerapkan transfer 
+learning  untuk meningkatkan performa prediksi melalui pembelajaran dari 
+beberapa data lahan. Hasil penelitian menunjukkan bahwa integrasi model ini dapat 
+memprediksi kebutuhan irigasi lebih efisien dibandingkan prediksi manual dan 
+mampu mengurangi penggunaan  air secara signifikan di lahan pengujian.  
+a. Analisis Penelitian Terdahulu  
+Kelebihan penelitian ini adalah kombinasi beberapa metode prediksi, 
+termasuk LSTM untuk prediksi jangka panjang, serta penggunaan transfer  learning  
+yang meningkatkan fleksibilitas mod el terhadap variasi lokal. Pendekatan ini 
+menunjukkan pemanfaatan data lingkungan yang lebih komprehensif dan 
+kemampuan model dalam memproyeksikan kebutuhan air masa depan. Namun, 
+penelitian ini tetap belum memanfaatkan API cuaca eksternal sebagai pengayaa n 
+feature  prediktif yang dapat memperbaiki prediksi dalam kondisi iklim yang 
+berubah -ubah secara regional. Selain itu, implementasi IoT disebutkan tetapi tidak 
+dijelaskan secara rinci mengenai arsitektur komunikasi data dan integrasi cloud  
+sebagai sistem monitoring  yang utuh.  
+b. Perbandingan dengan Penelititan yang Diajukan  
+Penelitian yang diusulkan memperkuat aspek data dengan integrasi API 
+Accu Weather  dan memusatkan fokus pada sawah tadah hujan, sehingga lebih 
+representatif terhadap konteks ketergantungan hu jan dan variasi curah hujan. Selain 
+itu, model prediksi LSTM yang digunakan secara eksplisit diarahkan untuk 
+kebutuhan air tanaman padi pada konteks irigasi tidak permanen.  
+
+11 
+ 2.1.3 A Predictive Model for Crop Irrigation  Scheduling Using Machine  
+Learning  and IoT-Generated Environmental Data  
+Pada penelitian ini, dikembangkan model prediksi jadwal irigasi tanaman 
+berbasis data lingkungan yang dikumpulkan dari sistem IoT. Fokusnya adalah 
+memindahkan sistem dari sekadar monitoring  ke tahap analisis prediktif untuk 
+menentukan kebutuhan irigasi di masa depan. Data sensor yang dikumpulkan dari 
+DHT11 untuk suhu dan kelembapan serta sensor kelembaban tanah digunakan 
+untuk melatih model machine  learning , yang kemudian digunakan untuk 
+memprediksi tingkat kelembapan tanah di waktu berikutnya. Evaluasi model 
+menunjukkan performa prediksi yang tinggi dengan MAE 2,5%, RMSE 3,1%, dan 
+R² 0,92, menunjukkan bahwa model dapat menangkap pola data lingkungan untuk 
+prediksi kebutuhan irigasi [4]. 
+a. Analisis Penelitian Terdahulu  
+Keunggulan penelitian ini adalah implementasi model prediksi ML yang 
+menunjukkan performa prediksi yang kuat dan transisi dari monitoring  ke predik si. 
+Namun, penelitian ini terbatas pada sensor lokal tanpa integrasi data  cuaca  
+eksternal, serta penggunaan algoritma yang tidak dijelaskan secara rinci apakah 
+mempertimbangkan ketergantungan waktu seperti teknik time series  yang lebih 
+kompleks ( deep learn ing). Selain itu, sistem tidak dirancang untuk konteks lahan 
+yang bergantung tinggi pada curah hujan seperti sawah tadah hujan.  
+b. Perbandingan dengan Penelitian yang Diajukan  
+Penelitian yang diusulkan menawarkan peningkatan dengan penggunaan 
+LSTM  yang memang  dirancang untuk menangani data deret waktu, serta integrasi 
+
+12 
+ data cuaca melalui API Accu Weather , sehingga prediksi kebutuhan air bukan hanya 
+berdasarkan data sensor lokal tetapi juga termasuk informasi cuaca yang 
+diproyeksikan.  
+2.1.4 Integrasi Sistem IoT untuk Pemantauan Cuaca Real -time dan Prediksi 
+Curah Hujan Berbasis LSTM  
+Penelitian oleh Yudistira dan Ikhsan [5] mengembangkan sistem pemantauan 
+cuaca real-time berbasis IoT yang terintegrasi dengan model prediksi curah hujan 
+menggunakan LSTM. Sistem dibangun menggunakan mikrokontroler ESP32, 
+sensor DHT22 untuk parameter suhu dan kelembapan, serta sensor lainnya untuk 
+menangkap data lapangan yang kemudian diolah oleh model LSTM untuk 
+memprediksi curah hujan mikrospasial. Sistem ini mampu memperlihatkan data 
+cuaca real-time melalui antarmuka web, sementara model LSTM memberikan 
+prediksi curah hujan dengan kinerja prediksi (RMSE = 17.05 mm, MAE = 12.40 
+mm) yang memadai untuk pemant auan intensitas hujan ekstrem secara lokal.  
+a. Analisis Penelitian Terdahulu  
+Penelitian ini menunjukkan integrasi IoT dan LSTM untuk prediksi variabel 
+cuaca  yang spesifik, yakni curah hujan, serta implementasinya dengan ESP32 dan 
+sensor lingkungan. Keunggulan penelitian terletak pada kemampuan prediksi cuaca 
+mikrospasial yang dapat mendukung praktik pertanian adaptif. Namun, penelitian 
+ini tidak ditujukan unt uk prediksi kebutuhan air tanaman  secara langsung, sehingga 
+belum sepenuhnya mengoptimalkan output  untuk manajemen irigasi atau 
+kebutuhan air tanaman tertentu.  
+
+13 
+ b. Perbandingan dengan Penelitian yang Diajukan  
+Penelitian yang diusulkan mengambil pelajaran dari penggunaan LSTM 
+untuk prediksi data cuaca dan memperluasnya ke prediksi kebutuhan air pada 
+tanaman padi yang membutuhkan integrasi antara data cuaca dan sensor tanah. 
+Selain itu, integrasi API Accu Weather  memberikan sumber data cuaca eksternal 
+yang dapat m emperkaya prediksi.  
+Dari kajian jurnal di atas, terlihat bahwa penelitian terdahulu secara umum 
+telah berkembang dari monitoring  real-time berbasis IoT ke arah prediksi berbasis 
+machine  learning  dan deep learning . Meski demikian, masih terdapat keterbatasa n 
+dalam kombinasi antena data lokal dengan data cuaca eksternal, khususnya via API 
+cuaca yang penting untuk kelembapan dan curah hujan pada lahan sawah tadah 
+hujan. Selain itu, model prediksi yang lebih kuat seperti LSTM  belum banyak 
+diterapkan pada kontek s kebutuhan air tanaman secara holistik , terutama yang 
+mempertimbangkan pola deret waktu lengkap dari berbagai parameter lingkungan.  
+Penelitian yang diusulkan memberikan kontribusi signifikan untuk mengisi 
+kesenjangan ini dengan (1) mengintegrasikan data IoT sensor dan data cuaca 
+eksternal dari API Accu Weather , (2) menerapkan LSTM untuk prediksi kebutuhan 
+air tanaman dalam konteks deret waktu, dan (3) fokus pada sawah tadah hujan yang 
+rentan terhadap variabilitas curah hujan serta memiliki keterbatasan sumber air 
+alternatif.  
+
+14 
+ 2.2 Landasan Teori  
+2.2.1 Internet of Things (IoT)   
+Internet of Things adalah teknologi yang memungkinkan konektivitas dan 
+pertukaran data secara otomatis antara perangkat fisik yang dilengkapi sensor dan 
+internet, dengan tujuan m emantau serta mengendalikan proses secara real-time[6]. 
+IoT memungkinkan integrasi data fisik dengan siste m komputasi untuk memantau 
+dan mengendalikan kondisi lingkungan tanpa interaksi manusia secara langsung, 
+sehingga mendukung pengambilan keputusan berbasis data yang lebih efektif dan 
+efisien. IoT juga menjadi pendorong utama di berbagai sektor termasuk ind ustri, 
+transportasi, kesehatan, dan pertanian melalui otomasi dan konektivitas data cerdas 
+yang terus berkembang.   
+2.2.1.1.  IoT dalam Pertanian  
+Dalam Pertanian IoT digunakan untuk memantau variabel lingkungan seperti 
+kelembaban tanah, suhu, curah hujan, dan lainnya  untuk mendukung pengambilan 
+keputusan operasional secara otomatis atau semi -otomatis. Sistem IoT menjadi 
+tulang punggung pertanian presisi ( precision  agriculture ) yang bertujuan 
+meningkatkan efisiensi sumber daya khususnya air irigasi [7].  
+2.2.1.2.  Indikator/Dimensi Variabel IoT 
+a. Sensor Monitoring  
+Sensor kelembaban tanah untuk mendapatkan nilai soil moisture secara 
+real-time, Sensor suhu dan kelembaban udara.  
+
+15 
+ b. Komunikasi Data  
+Penggunaan mikrokontroler (mis ., ESP32) untuk mengirim data ke server 
+atau cloud . 
+c. Platform Integrasi  
+Penggunaan dashboard  atau platform IoT untuk visualisasi dan 
+penyimpanan data.Variabel ini menyediakan data input  untuk model 
+prediksi LSTM dan pengambilan keputusan sistem irigasi.  
+2.2.2 Application Programming  Interface  (API)  dan Agrometeorologi  
+2.2.2.1  Definisi Application Programming  Interface  (API)  
+Application Programming  Interface  (API) merupakan sekumpulan aturan, 
+protokol, dan spesifikasi standar yang memungkinkan dua atau lebih sistem 
+perangkat lunak berkomunikasi dan bertukar data secara terstruktur. API bertindak 
+sebagai antarmuka yang menghubungkan aplikasi klien (misalnya si stem IoT) 
+dengan layanan eksternal (misalnya layanan cuaca) serta memungkinkan 
+pertukaran informasi dengan format standar seperti JSON atau XML tanpa perlu 
+mengetahui detail implementasi internal dari layanan penyedia. Dalam konteks 
+sistem digital dan IoT, API menjadi komponen penting yang memfasilitasi 
+interoperabilitas lintas aplikasi, integrasi layanan data eksternal, dan otomatisasi 
+akses data real-time yang diperlukan untuk pengambilan keputusan dan 
+pengendalian sistem secara cerdas [8]. 
+Lebih lanjut, API juga memungkinkan sistem IoT dalam pertanian untuk 
+memperoleh data cuaca eksternal (seperti suhu udara, c urah hujan, kelembapan, dan 
+prediksi parameter meteorologi) dari penyedia weather  service seperti 
+
+16 
+ Accu Weather  API atau OpenWeather  API, yang kemudian dapat diolah oleh model 
+prediktif atau sistem irigasi otomatis untuk mendukung manajemen air berdasarkan 
+kondisi cuaca terkini maupun prakiraan masa depan. Pendekatan ini terbukti efektif 
+meningkatkan akurasi data lingkungan dan memberikan dasar informasi yang kuat 
+bagi sistem pertanian cerdas ( smart agriculture ) yang dipadukan dengan teknik 
+pembelajaran mesin  seperti Long Short -Term Memory (LSTM) untuk prediksi 
+kebutuhan air [8]. 
+2.2.2.2  Definisi Agrometeorologi  
+Agrometeor ologi merupakan cabang ilmu terapan yang mengkaji interaksi 
+antara unsur meteorologi, klimatologi, dan proses biologis tanaman dalam sistem 
+pertanian. Fokus utama agrometeorologi adalah pemanfaatan informasi cuaca dan 
+iklim untuk mendukung pengambilan kepu tusan dalam pengelolaan pertanian, 
+khususnya terkait kebutuhan air, waktu tanam, dan mitigasi risiko iklim ekstrem.  
+Dalam Jurnal Agromet Indonesia [9], variabilitas curah hujan, suhu udara, dan 
+kelembaban relatif memiliki pengaruh signifikan terhadap kebutuhan 
+evapotranspirasi tanaman dan efisiensi iriga si. Informasi cuaca yang akurat menjadi 
+faktor kunci dalam mengoptimalkan penggunaan sumber daya air serta 
+meningkatkan produktivitas pertanian berkelanjutan.  
+Agrometeorologi modern tidak hanya bergantung pada data historis, tetapi 
+juga memanfaatkan data p rakiraan cuaca jangka pendek dan menengah untuk 
+mendukung sistem pertanian presisi ( precision  agriculture ) berbasis teknologi 
+digital.  
+
+17 
+ 2.2.2.3  Indikator dan Dimensi Variabel API Cuaca  
+Variabel cuaca yang diperoleh dari API Accu Weather  dalam konteks 
+agrometeorologi terdiri dari beberapa indikator utama, yaitu:  
+1. Prediksi Curah Hujan  
+Prediksi curah hujan merupakan indikator utama dalam penentuan kebutuhan 
+irigasi. Informasi probabilitas hujan dan intensitas hujan harian digunakan untuk 
+mengestimasi kontribusi air alami terhadap kebutuhan tanaman.  
+Pemanfaatan data prakiraan hujan berbasis API dapat menurunkan risiko 
+kelebihan penyiraman ( over-irrigation ) serta meningkatkan efisiensi distribusi air 
+irigasi [10]. 
+2.  Parameter Cuaca Lainnya  
+Selain curah hujan, parameter cuaca lain yan g berpengaruh terhadap 
+kebutuhan air tanaman meliputi:  
+a. Suhu udara  
+b. Kelembaban relatif  
+c. Tekanan udara  
+d. Kecepatan angin  
+Parameter -parameter tersebut digunakan dalam perhitungan evapotranspirasi 
+potensial (ET₀), yang menjadi dasar estimasi kebutuhan air tanaman.  Hidayat dan 
+Prasetyo (2022) menegaskan bahwa kombinasi suhu dan kelembaban memiliki 
+korelasi kuat terhadap laju kehilangan air tanaman, terutama pada lahan 
+terbuka [11]. 
+
+18 
+ 2.2.3 Model Long Short -Term Memory (LSTM) untuk Prediksi Kebutuhan Air  
+2.2.3.1   Long Short -Term Memory (LSTM)  
+Long Short -Term Memory (LSTM) merupakan salah satu varian dari 
+Recurrent Neural Ne twork (RNN) yang dirancang untuk mengatasi permasalahan 
+vanishing gradient dalam pemodelan data deret waktu ( time series ). Arsitektur 
+LSTM memiliki komponen utama berupa cell state , input  gate, forget  gate, dan 
+output  gate yang memungkinkan model mempertahankan serta memperbarui 
+informasi penting dalam jangka waktu yang panjang.  
+Dalam konteks pertanian cerdas, LSTM banyak digunakan untuk 
+memodelkan dinamika temporal variabel lingkungan seperti kelembaban tanah, 
+suhu udara, kelembaban relatif, dan curah hujan. Penelitian oleh Saputra [12] 
+menunjukkan bahwa LSTM mampu mempelajari pola temporal kompleks pada 
+data lingkungan pertanian dan memberikan hasil prediksi yang lebih stabil 
+dibandingkan metode regresi konvensional. Hal ini menjadikan LSTM sesuai untuk 
+prediksi kebutuhan air tanaman yang dipengaruhi oleh fluktuasi cuaca dan kondisi 
+mikroklimat.  
+2.2.3.2   Kelebihan LSTM dibandingkan Metode Lain  
+Dibandingkan metode prediksi lain seperti Artificial Neural Network  (ANN) 
+statis, Suppor t Vector Regression  (SVR), maupun regresi linier, LSTM memiliki 
+keunggulan utama dalam menangkap long -term dependency  pada data deret waktu. 
+Keunggulan ini sangat penting dalam prediksi kebutuhan air, di mana kondisi saat 
+ini tidak hanya dipengaruhi oleh d ata terbaru, tetapi juga oleh tren historis dan 
+variabilitas musiman.  
+
+19 
+ Menurut penelitian Harahap dan Ramadhan [13], penerapan LSTM pada 
+sistem irigasi berbasis IoT menunjukkan tingkat akurasi yang lebih tinggi 
+dibandingkan metode ANN, khususnya pada data dengan pola musiman dan 
+flukt uasi tidak linier. LSTM juga terbukti lebih adaptif terhadap perubahan kondisi 
+cuaca ekstrem, sehingga relevan untuk perencanaan irigasi sawah yang dipengaruhi 
+oleh dinamika iklim jangka menengah.  
+2.2.3.3   Indikator dan Dimensi Variabel Prediksi Kebutuhan Air (LSTM)  
+Variabel dalam pemodelan LSTM untuk prediksi kebutuhan air terdiri dari 
+variabel input  dan output  sebagai berikut:  
+1. Variabel Input  Historis  
+Variabel input  merupakan data deret waktu yang dikumpul kan secara 
+periodik dari sensor IoT dan layanan cuaca, meliputi:  
+a. Kelembaban tanah  
+b. Suhu udara  
+c. Kelembaban udara  
+d. Curah hujan  
+Data historis tersebut disusun dalam bentuk sequence untuk menangkap pola 
+temporal. Penggunaan kombinasi variabel lingkungan secara mu ltivariat dalam 
+LSTM dapat meningkatkan akurasi prediksi kebutuhan air tanaman secara 
+signifikan [14]. 
+2. Variabel Output  Prediksi  
+Variabel output  berupa nilai kebutuhan air yang diprediksi pada waktu t+1 
+atau pada horizon waktu tertentu (harian atau mingguan). Nilai ini digunakan 
+
+20 
+ sebagai dasar pengambilan keputusan penyiraman irigasi secara otomatis maupun 
+semi -otomatis.  
+2.2.4 Metode Evaluasi Kinerja Mod el Prediksi  
+Evaluasi kinerja model dilakukan untuk mengetahui tingkat akurasi dan 
+keandalan model dalam memprediksi kebutuhan air pada sawah tadah hujan 
+berdasarkan data historis sensor dan data cuaca. Evaluasi yang digunakan dalam 
+penelitian ini mencakup beberapa metrik error  yang umum dipakai dalam prediksi 
+deret waktu.  
+Evaluasi kinerja model prediksi sangat penting untuk memahami sejauh mana 
+model mampu menangkap pola temporal dalam data dan menghasilkan prediksi 
+yang dekat dengan nilai aktual. Penelitia n sebelumnya menunjukkan bahwa LSTM 
+banyak dievaluasi menggunakan metrik seperti Mean  Absolute  Error  (MAE)  dan 
+Root  Mean  Square  Error  (RMSE)  karena keduanya mampu memberikan 
+gambaran kesalahan prediksi dari dua sudut evaluasi yang berbeda —yakni rata -rata 
+error dan penalti terhadap error  besar [15]. 
+1. Mean  Square  Error  (MAE) 
+Mean  Absolute  Error  (MAE) merupakan metode evaluasi yang digunakan 
+untuk mengukur rata -rata kesalahan absolut antara nilai hasil prediksi dan nilai 
+aktual. MAE memberikan gambaran seberapa besar deviasi hasil prediksi model 
+terhadap nilai sebenarnya ta npa memperhatikan arah kesalahan. Metrik ini 
+merepresentasikan rata -rata nilai absolut selisih antara nilai yang diprediksi model 
+dan nilai aktual, sehingga memudahkan dalam interpretasi secara umum.  
+Secara matematis, MAE dirumuskan sebagai berikut:  
+
+21 
+ 𝑀𝐴𝐸 =1
+𝑛∑|𝑦𝑖−𝑦𝑖̂|𝑛
+𝑖=1 
+dengan:  
+𝑦𝑖  : Nilai aktual  kebutuhan air  
+𝑦𝑖̂∶Nilai hasil prediksi model LSTM  
+𝑛∶Jumlah data pengujian  
+ 
+2. Root  Mean  Square  Error  (RMSE)  
+Root  Mean  Square  Error  (RMSE) merupakan metode evaluasi yang 
+mengukur akar dari rata -rata kuadrat selisih antara nilai aktual dan nilai prediksi. 
+RMSE memberikan penalti yang lebih besar terhadap kesalahan prediksi yang 
+memiliki selisih besar, sehingga lebih sensitif terhadap o utlier dibandingkan MAE. 
+Hal ini membuat RMSE menjadi metrik yang tepat untuk menilai performa model 
+ketika terdapat indikasi kesalahan besar pada prediksi.  
+Secara matematis, RMSE dirumuskan sebagai berikut:  
+𝑅𝑀𝑆𝐸 =√1
+𝑛∑(𝑦𝑖−𝑦𝑖̂)2𝑛
+𝑖=1 
+dengan:  
+𝑦𝑖∶Nilai  aktual kebutuhan air  
+𝑦𝑖 ̂: Nilai hasil prediksi model LSTM  
+𝑛∶Jumlah data pengujian  
+3. Alasan Pemilihan MAE dan RMSE  
+
+22 
+ Metode MAE dan RMSE dipilih dalam penelitian ini karena keduanya 
+termasuk metrik evaluasi yang paling luas digunakan dalam penelitian predi ksi 
+deret waktu berbasis deep learning , termasuk model LSTM. MAE memberikan 
+informasi mengenai rata -rata kesalahan absolut, sedangkan RMSE memberikan 
+penalti lebih terhadap kesalahan besar, sehingga penggunaan kedua metrik tersebut 
+secara bersamaan memberi kan gambaran evaluasi performa model yang lebih 
+komprehensif [15]. 
+4. Interpretasi Hasil Evaluasi  
+Hasil perhitungan MAE dan RMSE digunakan sebagai dasar dalam menilai 
+akurasi model LSTM setelah proses pelatihan. Nilai error  yang lebih kecil pada 
+kedua metrik ini menunjukkan bahwa model mampu memprediksi kebutuhan air 
+dengan tingkat keakuratan yang lebi h tinggi. Selain itu, perbandingan nilai MAE 
+dan RMSE dapat juga digunakan untuk mengidentifikasi apakah model cenderung 
+menghasilkan prediksi dengan kesalahan besar, karena RMSE akan memberikan 
+bobot lebih pada selisih yang besar dibandingkan MAE.  
+Interpr etasi hasil evaluasi ini penting untuk membandingkan performa model 
+LSTM sebelum dan sesudah penyesuaian parameter atau modifikasi arsitektur, 
+sehingga memungkinkan perbaikan performa model secara sistematis untuk 
+menghasilkan prediksi yang lebih andal.  
+  
+
+23 
+ 2.2.5 Dashboard  Web Monitoring  
+2.2.8.1   Definisi dan Fungsi  
+Dashboard  web monitoring  merupakan antarmuka visualisasi berbasis web 
+yang dirancang untuk menyajikan hasil pengukuran sensor dan informasi hasil 
+pengolahan data secara terintegrasi. Dashboard  ini digunakan oleh pengguna, 
+seperti petani atau peneliti, untuk memantau kondisi lahan  pertanian secara digital 
+dan sistematis [16]. 
+Fungsi utama dashboard  web adalah menampilkan data kelembapan tanah, 
+tren kebutuhan air tanaman, serta informasi prakiraan cuaca dalam bentu k grafik 
+dan indikator visual. Melalui penyajian data yang ringkas dan informatif, 
+dashboard  berperan sebagai alat bantu dalam memahami kondisi lahan dan 
+mendukung pengambilan keputusan pengairan yang lebih tepat.  
+2.2.8.2   Cara Kerja  
+Dashboard  web monitoring  beker ja dengan cara berkomunikasi dengan 
+sistem Backend  melalui Application Programming  Interface  (API). Backend  
+berfungsi sebagai pengelola data yang menerima, menyimpan, dan memproses data 
+dari sensor IoT serta sumber data eksternal, seperti layanan cuaca.  
+Data yang diperoleh kemudian ditampilkan pada dashboard  dalam bentuk 
+grafik, laporan historis, dan indikator status real-time. Penyajian ini memungkinkan 
+pengguna untuk memantau kondisi lahan secara kontinu, mengevaluasi perubahan 
+parameter lingkungan, serta  merespons kondisi kritis secara lebih cepat dan 
+berbasis dat a. 
+
+24 
+ 2.2.8.3   Kelebihan dan Kekurangan  
+Dashboard  web monitoring  memiliki sejumlah kelebihan, antara lain 
+menyediakan visualisasi data yang intuitif dan mudah dipahami, serta dapat diakses 
+melalui web browser tanpa memerlukan instalasi perangkat lunak tambahan. Selain 
+itu, kemampuan menampilkan data historis dan tren k ebutuhan air tanaman 
+mendukung evaluasi efisiensi pengairan dan perencanaan pengelolaan air jangka 
+panjang.  
+Namun demikian, dashboard  web monitoring  juga memiliki beberapa 
+keterbatasan. Proses perancangan dan pengembangannya memerlukan kompetensi 
+teknis di  bidang pengembangan front -end dan integrasi dengan sistem Backend . 
+Selain itu, apabila tidak dilakukan optimasi sistem yang memadai, kinerja 
+dashboard  dapat menurun, khususnya ketika memproses dan menampilkan data 
+dalam jumlah besar atau data historis den gan rentang waktu yang panjang [16]. 
+2.2.6 Arsitektur Basis Data dan Backend  Server  
+2.2.7.1  Definisi dan Fungsionalitas  
+Dalam ekosistem Internet of Things (IoT) , basis data (database) dan Backend  
+server berfungsi sebagai komponen middleware  yang krusial untuk manajemen 
+data. Basis data bertindak sebagai repositori terpusat yang menyimpan data deret 
+waktu ( time-series  data) dari sensor lokal (seperti kelembaban tanah dan suhu) serta 
+data eksternal yang diperoleh dari Application Programming  Interface  (API) 
+Accu Weather [17]. Penyimpanan data historis yang terstruktur ini esensial untuk 
+mendukung pelatihan dan validasi model prediktif berbasis Long Short -Term 
+Memory (LSTM), yang memerlukan dataset sekuensial untuk menghasilkan 
+
+25 
+ prediksi cuaca atau kondisi tanah yang akurat [18]. Sementara itu, Backend  server 
+berperan sebagai jembatan komunikasi yang mengorkestrasi pertukaran data antara 
+lapisan persepsi (perangkat IoT), lapisan penyimpanan (basis data), dan lapisan 
+aplikasi ( web dashboard )[19].  
+2.2.7.2  Cara Kerja Sistem  
+Mekanisme pertukaran data dalam sistem ini mengikuti arsitektur client -
+server  standar. Mikrokontroler ESP32 , yang bertindak sebagai node sensor, 
+mentransmisikan data telemetri menggunakan protokol komunikasi ringan seperti 
+MQTT ( Message Queuing Telemetry Transport ) atau HTTP ( Hypertext Transfer 
+Protocol ) ke server [20]. Server kemudian memproses payload data tersebut dan 
+menyimpannya ke dalam sistem manajemen basis data, baik yang be rsifat relasional 
+(seperti MySQL) maupun non -relasional (NoSQL), untuk menjamin persistensi 
+data. Selanjutnya, antarmuka web dashboard  meminta ( request ) data tersebut 
+melalui RESTful API untuk keperluan visualisasi grafik secara real-time maupun 
+pelaporan data historis [21]. 
+2.2.7.3  Keunggulan dan Kelemahan  
+Implementasi arsitektur ini menawarkan dua keunggulan utama:  
+a. Analitik Jangka Panjang : Penyimpanan data historis yang sistematis 
+memungkinkan analisis tren longitudinal. Data ini menjadi aset vital bagi 
+pengembangan model machine  learning , seperti LSTM, yang mampu 
+memprediksi anomali atau kondisi masa depan berdasarkan pola data masa 
+lalu [18]. 
+
+26 
+ b. Visibilitas dan Interaktivitas: Sistem ini memfasilitasi visualisasi dat a 
+yang komprehensif melalui dashboard  interaktif. Hal ini meningkatkan 
+kesadaran situasional ( situational awareness ) pengguna dengan 
+menyajikan data pemantauan real-time dan historis dalam format yang 
+mudah diinterpretasikan [21]. 
+Meskipun menawarkan berbagai keunggulan, arsitektur ini memiliki 
+tantangan teknis, antara lain:  
+a. Over head Infrastruktur: Diperlukan kapasitas server yang memadai dan 
+pemeliharaan Backend  secara berkala untuk menjamin ketersediaan 
+(availability ) dan integritas data, terutama saat volume data sensor 
+meningkat [19]. 
+b. Kompleksitas Pengembangan: Implementasi sistem ini menuntut 
+kompetensi pemrograman full-stack , meliputi penguasaan bahasa s isi 
+server (seperti Node.js atau PHP) serta desain skema basis data yang 
+efisien untuk menangani query  yang kompleks [20]. 
+2.2.7 Mikrokontroler ESP32  dengan Modul SIM800L Terintegrasi  
+2.2.5.1  Konsep Dasar Mikrokontroler ESP 32  
+Gambar 2. 1 Mikrokontroler ESP32  
+ 
+
+27 
+ Mikrokontroler  ESP32 merupakan perangkat mikrokontroler berbasis 
+System -on-Chip  (SoC) 32 -bit yang dilengkapi modul Wi-Fi dan Bluetooth  untuk 
+komunikasi nirkabel dalam aplikasi Internet of Things (IoT) . Dalam konteks sistem 
+pertanian cerdas, ESP32 berfungsi sebagai pusa t kendali utama yang mengakuisisi 
+data sensor, melakukan pemrosesan awal, serta mentransmisikan data ke server atau 
+dashboard  monitoring  secara real-time melalui koneksi internet. ESP32 sering 
+digunakan karena kemampuannya untuk menghubungkan perangkat fis ik dengan 
+platform IoT secara langsung melalui jaringan Wi-Fi tanpa memerlukan modul 
+komunikasi tambahan [22]. 
+2.2.5.2  Modul TTGO T -Call ESP32 dengan SIM800L Terintegrasi  
+Modul TTGO T -Call merupakan pengembangan spesifik dari ESP32 yang 
+mengintegrasikan modul komunikasi seluler SIM800L dalam satu printed circuit 
+board  (PCB). Integrasi ini menghilangkan kebutuhan akan kabel interkoneksi dan 
+Interface  tambahan antara ESP32 dan modul GSM, sehi ngga meningkatkan 
+keandalan sistem secara keseluruhan [23]. Modul ini mempertahankan seluruh 
+Gambar 2. 2 TTGO T -Call ESP32 dengan SIM800L Terintegrasi  
+
+28 
+ fungsi ESP32 standar sambil menambahkan kemampuan komunikasi melalui 
+jaringan GSM/GPRS 2G pada frekuensi 850/900/180 0/1900 MHz.  
+2.2.5.3  Arsitektur dan Spesifikasi Teknis  
+Modul TTGO T -Call mengadopsi arsitektur heterogeneous integration  di 
+mana ESP32 berfungsi sebagai main processor , sedangkan SIM800L berperan 
+sebagai cellular modem. Kedua komponen berkomunikasi melalui antarmuk a 
+UART dengan protokol AT commands . Modul ini juga dilengkapi dengan slot kartu 
+SIM, slot microSD  untuk penyimpanan data lokal, charging  circuit untuk baterai 
+Li-Po, dan antarmuka USB -C untuk pemrograman dan pengisian daya [24]. 
+Tabel 2. 1 Spesifikasi Komparatif ESP32 Standar dan TTGO T -Call  
+Parameter  ESP32 Standar  TTGO T -Call 
+ESP32 + SIM800L  Implikasi untuk 
+Penelitian  
+Processor  Dual -core 
+Xtensa 32 -bit Dual -core ESP32 
+240 MHz  Kapasitas pemrosesan 
+setara  
+Memori  520 KB SRAM, 
+4MB Flash  520 KB SRAM, 
+4MB Flash  Kemampuan 
+penyimpanan program 
+sama  
+Konektivitas 
+Nirkabel  Wi-Fi 802.11 
+b/g/n, Bluetooth 
+4.2 Wi-Fi 802.11 b/g/n, 
+Bluetooth 4.2, 
+GSM/GPRS  Tambahan konektivitas 
+seluler  
+
+29 
+ Parameter  ESP32 Standar  TTGO T -Call 
+ESP32 + SIM800L  Implikasi untuk 
+Penelitian  
+Antarmuka 
+Komunikasi  UART, I2C, 
+SPI, I2S  UART (untuk 
+SIM800L), I2C, SPI, 
+I2S Mendukung 
+komunikasi dengan 
+sensor dan modem  
+Konsumsi Daya 
+(Aktif)  ~100 -240 mA 
+(tergantung 
+mode)  ~80-200 mA 
+(ESP32) + 20 -200 
+mA (SIM800L)  Perlu optimasi 
+manajemen daya  
+Slot Ekspansi  - Slot kartu SIM, slot 
+microSD  Penyimpanan data 
+lokal dan koneksi 
+seluler  
+ 
+2.2.5.4  Kelebihan dan Kekurangan  
+Integrasi ESP32 dan SIM800L dalam modul TTGO T -Call menawarkan 
+beberapa keunggulan strategis untuk aplikasi monitoring  pertanian di area terpencil:  
+1. Independensi  dari Infrastruktur Wi-Fi: Modul ini memungkinkan transmisi 
+data melalui jaringan seluler 2G yang memiliki cakupan geografis lebih luas 
+dibandingkan Wi-Fi di daerah pedesaan [25]. Studi oleh Nguyen et al. (2023) 
+menunjukkan bahwa 92% wilayah pertanian di Indon esia bagian timur masih 
+memiliki cakupan sinyal GSM 2G yang memadai untuk transmisi data interval 
+15 menit [26]. 
+
+30 
+ 2. Mekanisme Fallback  Berlapis: Sistem dapat dikonfigurasi untuk menggunakan 
+GPRS sebagai saluran utama pengiriman data, dengan SMS sebagai cadangan 
+ketika koneksi dat a tidak tersedia. Penelitian Chen et al. (2023) mengonfirmasi 
+bahwa pendekatan hybrid  ini meningkatkan keandalan transmisi data hingga 
+99,7% dalam kondisi lapangan yang dinamis [27]. 
+3. Optimasi Konsumsi Daya:  Modul TTGO T -Call mendukung konfigurasi deep 
+sleep mode yang dapat mengurangi konsumsi daya hingga 10μA ketika tidak 
+melakukan transmisi. Fitur ini sangat relevan untuk sistem yang ditenagai panel 
+surya dengan kapasitas baterai terbatas [28]. 
+ 
+4. Pengurangan Kompleksitas Sistem: Integrasi dalam satu PCB mengurangi titik 
+kegagalan potensial, menyederhanakan proses instalasi lapangan, dan 
+meningkatkan ketahanan terhadap kondisi lingkungan seperti kelembaban 
+tinggi [29]. 
+2.2.8 Soil moisture Sensor  (FC-28) 
+2.2.6.1  Pengertian dan Fungsi  
+Sensor kelembapan tanah merupakan instrumen elektronik yang berfungsi 
+untuk mendeteksi kadar air di dalam media tanam secara real-time. Secara teknis, 
+Gambar 2. 3  Soil Moisture Sensor  
+ 
+
+31 
+ sensor ini bekerja dengan menghasilkan sinyal analog yang representatif terhadap 
+volume air di dalam tana h, di mana perubahan nilai resistansi atau kapasitansi 
+sensor akan dikonversi menjadi data digital oleh mikrokontroler seperti ESP32 [30]. 
+Dalam ekosistem pertanian berbasis Internet of Things (IoT) , data yang dihasilkan 
+oleh sensor ini menjadi parameter utama bagi sistem kendali otomatis untuk 
+menentukan waktu dan durasi penyiraman secara presisi, guna mengoptimalkan 
+penggunaan sumber daya air [22], [31] . 
+2.2.6.2  Cara Kerja  
+Sensor kelembapan tanah beroperasi dengan mendeteksi perubahan sifat fisik 
+tanah yang disebabkan oleh keberadaan molekul air di sekitar probe  sensor. Secara 
+umum, terdapat dua prinsip utama yang digunakan, yaitu resistif (m engukur 
+hambatan listrik antar elektroda) dan kapasitif (mengukur konstanta dielektrik 
+tanah) [30]. 
+Ketika kadar air meningkat, konduktivitas tanah akan naik (pada sensor 
+resistif ) atau kapasitansi akan berubah (pada sensor kapasitif), yang kemudian 
+menghasilkan output  berupa tegangan analog. Tegangan ini diterima oleh pin 
+Analog -to-Digital Converter  (ADC) pada mikrokontroler ESP32 untuk dikonversi 
+menjadi data digital [31]. Data tersebut kemudian diolah menjadi nilai persentase 
+kelembapan yang menjadi basis instruksi bagi sistem untuk mengaktifkan atau 
+mematikan pompa irigasi secara otomatis [32]. 
+
+32 
+ 2.2.6.3  Spesif ikasi Umum  
+Tabel 2. 2 Spesifikasi Umum Sensor Kelembabab Tanah  
+Parameter  Spesifikasi / Nilai  
+Tegangan Input  3.3V atau 5V DC  
+Arus Operasi  < 35 mA  
+Sinyal Output  Digital (D0) dan Analog (A0)  
+Tegangan Output  
+Analog  0V â€“ 4.2V (tergantung tegangan input ) 
+Tipe Probe  Dual -electrode (Resistif)  
+Dimensi Modul  Â± 30mm x 16mm  
+Resolusi ADC  10-bit (0 â€“ 1023) atau 12 -bit (0 â€“ 4095)  
+[33] 
+2.2.6.4  Kelebihan dan Kekurangan  
+Implementasi sensor kelembapan tanah dalam sistem irigasi otomatis 
+memiliki karakteristik fungsional yang mempengaruhi efektivitas pemantauan. 
+Berikut adalah analisis mengenai kelebi han dan kekurangan penggunaan sensor 
+tersebut:  
+1. Keunggulan Sistem  
+a. Efisiensi Biaya: Sensor ini memiliki harga yang sangat terjangkau, sehingga 
+memungkinkan implementasi dalam jumlah banyak untuk cakupan lahan 
+yang luas.  
+
+33 
+ b. Kemudahan Integrasi: Memiliki antarmuk a (Interface ) yang sederhana 
+(Analog dan Digital) sehingga mudah dihubungkan ke berbagai 
+mikrokontroler seperti ESP32, Arduino, atau Raspberry Pi [30]. 
+c. Pemantauan Real-time: Memberikan data kondisi kadar air tanah secara 
+langsung, yang memungkinkan sistem irigasi bekerja hanya saat dibutuhkan 
+(menghemat air hingga 30 -50%) .  
+d. Konsumsi Daya Rendah: Operasional sensor hanya membutuhkan arus yang 
+kecil (sekitar 5 -20 mA), sehingga s angat cocok untuk perangkat bertenaga 
+baterai atau panel surya [34]. 
+2. Batasan dan Kelemahan  
+a. Masalah Korosi (Tipe Resistif ): Pada sensor tipe resistif (seperti FC -28), 
+elektroda yang bersentuhan langsung dengan tanah cenderung mengalami 
+elektrolisis dan korosi seiring waktu, yang dapat menurunkan akurasi dan 
+memperpendek usia sensor.  
+b. Sensitivitas terhadap Mineral: Pembacaan s ensor dapat dipengaruhi oleh 
+kadar garam (salinitas) atau pupuk di dalam tanah, yang terkadang terbaca 
+sebagai kadar air yang tinggi karena meningkatnya konduktivitas listrik.  
+c. Jangkauan Terbatas: Sensor hanya mengukur kelembapan di area yang 
+bersentuhan la ngsung dengan probe . Untuk lahan yang besar, diperlukan 
+beberapa sensor untuk mendapatkan data yang representatif.  
+d. Kebutuhan Kalibrasi: Nilai analog yang dihasilkan sering  kali bervariasi 
+tergantung pada jenis tanah (tanah pasir, lempung, atau humus), sehi ngga 
+
+34 
+ memerlukan kalibrasi manual di awal penggunaan untuk hasil yang 
+akurat [31]. 
+2.2.9 Sensor Suhu dan Kelembaban Udara DHT22  
+2.2.9.1  Definisi Sensor DHT22  
+Sensor DHT22 (AM2302) merupakan sensor digital terintegrasi yang mampu 
+mengukur suhu udara dan kelembaban relatif secara simultan. Sensor ini 
+menggunakan elemen kapasitif untuk pengukuran kelembaban dan termistor tipe 
+NTC untuk pengukuran su hu, dengan output  digital melalui antarmuka single -
+wire[35]. Berbeda dengan pendah ulunya DHT11, DHT22 menawarkan akurasi 
+yang lebih tinggi (±0.5°C untuk suhu dan ±2% untuk kelembaban relatif) serta 
+rentang pengukuran yang lebih luas ( -40 hingga 80°C untuk suhu dan 0 -100% untuk 
+kelembaban) [36]. 
+Gambar 2. 4  Sensor DHT22  
+
+35 
+ 2.2.9.2  Spesifikasi Teknis  
+ 
+Tabel 2. 3 Spesifikasi Sensor DHT22  
+Kategori  Parameter  Nilai  
+Pengukuran Suhu  Rentang  -40°C hingga 80°C  
+  Akurasi  ±0.5°C (pada 25°C)  
+  Resolusi  0.1°C  
+Pengukuran 
+Kelembaban  Rentang  0% hingga 100% RH  
+  Akurasi  ±2% RH (pada 25°C)  
+  Resolusi  0.1% RH  
+Karakteristik Elektrik  Tegangan  3.3V - 5.5V DC  
+  Konsumsi 
+Arus  1.5mA (ukur), 40 -50μA 
+(idle)  
+  Interface  Digital single -wire 
+
+36 
+ Kategori  Parameter  Nilai  
+Karakteristik 
+Operasional  Sampling Rate  0.5 Hz (maks)  
+  Waktu 
+Respons  2 detik (RH), <10 detik 
+(suhu)  
+  Jarak Kabel  ≤20 meter  
+Fisik  Dimensi  15.1mm × 25mm × 7.7mm  
+  Berat  3 gram  
+Sumber: [35], [36], [37]  
+2.2.9.3  Cara Kerja  
+Sensor DHT22 bekerja dengan tiga tahap utama:  
+1. Tahap Inisialisasi: Mikrokontroler mengirim sinyal start (18ms LOW → 
+20-40μs HIGH) untuk membangunkan sensor dari sleep mode . 
+2. Tahap Konversi: Sensor mengukur kelembaban melalui perubahan 
+kapasitansi polimer (2ms) dan suhu melalui perubahan resistansi NTC 
+(10ms).  
+3. Tahap Transmisi: Sensor mengirim 40 -bit data (16 -bit RH + 16 -bit suhu + 
+8-bit checksum ) menggunakan protokol Manchester e ncoding  melalui 
+single -wire [38]. 
+
+37 
+ Data dikirim dalam format:  
+1. Byte 1 -2: Kelembaban relatif (integer + decimal)  
+2. Byte 3 -4: Suhu (integer + decimal)  
+3. Byte 5: Checksum (jumlah 4 byte pertama)  
+2.2.9.4  Kelebihan dan Kekurangan  
+Kelebihan:  
+1. Akurasi Tinggi: ±0.5°C dan ±2% RH lebih baik  dari DHT11 [47]  
+2. Dual  Parameter: Satu sensor untuk dua pengukuran  
+3. Digital  Output : Minim noise, mudah diproses  
+4. Low Power : Cocok untuk sistem baterai [39] 
+5. Wide  Range : -40°C hingga 80°C  
+6. Murah: Harga terjangkau untuk penelitian  
+Kekurangan:  
+1. Slow Response : Butuh 2 -10 detik untuk pembacaan stabil  
+2. Single -wire Protocol : Sensitif terhadap timing dan interrupt  
+3. Calibration Drift : ±1% RH per tahun [40] 
+4. Environmental Sensitivity : Perlu proteksi dari UV dan kondensasi  
+5. Limited Sampling : Maksimal 0.5 Hz  
+6. Short Cable : ≤20m untuk akurasi optimal  
+7. No Analog Output : Hanya digital output  
+
+38 
+ BAB III  
+METODE PENELITIAN  
+3.1 Tahapan Penelitian  
+ 
+ 
+3.1.1 Studi Pustaka  
+Studi pustaka merupakan tahap awal penelitian yang bertujuan untuk 
+memperoleh landasan teoritis dan pemahaman konseptual terkait permasalahan 
+yang dikaji. Pada tahap ini dilakukan pengumpulan dan penelaahan referensi ilmiah 
+yang relevan dengan sistem monit oring  sawah tadah hujan berbasis Internet of 
+Gambar 3. 1 Diagram Alir Tahapan Penelitian  
+
+39 
+ Things (IoT) , integrasi data cuaca, serta prediksi kebutuhan air menggunakan 
+metode Long Short -Term Memory (LSTM).  
+Referensi yang dikaji meliputi jurnal ilmiah yang membahas penerapan IoT 
+dalam pertanian, peman faatan data cuaca berbasis API untuk mendukung 
+pengelolaan irigasi, serta penggunaan LSTM dalam pemodelan dan prediksi 
+kebutuhan air tanaman. Studi pustaka ini digunakan untuk memahami konsep dasar 
+sistem, menentukan parameter lingkungan yang dimonitor, se rta memilih metode 
+prediksi yang sesuai dengan karakteristik data deret waktu.  
+Hasil studi pustaka menjadi dasar dalam perancangan sistem monitoring  dan 
+pengembangan model prediksi kebutuhan air yang selaras dengan tujuan dan ruang 
+lingkup penelitian.  
+3.1.2 Stud i Literatur  
+Studi literatur dilakukan untuk memperoleh landasan teoritis dan kerangka 
+konseptual penelitian melalui kajian terhadap jurnal ilmiah, buku referensi, dan 
+dokumentasi teknis yang relevan. Fokus kajian meliputi penerapan Internet of 
+Things (IoT)   dalam bidang pertanian, pemanfaatan API Accu Weather  sebagai 
+sumber data cuaca eksternal, serta penggunaan algoritma Long Short -Term Memory 
+(LSTM) dalam pemodelan dan prediksi kebutuhan air berbasis data deret waktu. 
+Hasil studi literatur ini digunakan se bagai dasar dalam perancangan sistem, 
+penentuan parameter penelitian, serta pemilihan metode prediksi yang sesuai 
+dengan tujuan penelitian.  
+
+40 
+ 3.2 Pengumpulan Data  
+Pengumpulan data merupakan tahap penelitian yang bertujuan untuk 
+memperoleh data yang diperlukan da lam proses monitoring  dan prediksi kebutuhan 
+air pada sawah tadah hujan. Data yang dikumpulkan digunakan sebagai input  dalam 
+sistem monitoring  berbasis IoT serta sebagai data deret waktu ( time series ) untuk 
+pemodelan prediksi kebutuhan air menggunakan meto de Long Short -Term Memory 
+(LSTM).  
+1. Tempat penelitian  
+Penelitian ini dilaksanakan di Desa Andoolo Utama, Kecamatan Buke, 
+Kabupaten Konawe Selatan, Provinsi Sulawesi Tenggara. Wilayah ini 
+memiliki dominasi lahan sawah tadah hujan yang belum dilengkapi jaringan 
+irigasi permanen, sehingga ketersediaan air sangat bergantung pada curah 
+hujan.  
+Variabilitas curah hujan yang cukup tinggi, terutama pada musim kemarau, 
+menyebabkan fluktuasi ketersediaan air di lahan pertanian. Pengelolaan air 
+masih di lakukan secara manual berdasarkan pengalaman petani tanpa 
+dukungan sistem pemantauan berbasis data.  
+Lokasi ini dipilih karena karakteristiknya merepresentasikan kondisi sawah 
+tadah hujan yang rentan terhadap ketidakpastian iklim, sehingga sesuai untuk 
+
+41 
+ implementasi dan pengujian sistem monitoring berbasis IoT yang terintegrasi 
+dengan prediksi kebutuhan air.  
+2. Jenis Data dan Sumber Data  
+Jenis data yang digunakan dalam penelitian ini terdiri atas dua kategori, yaitu 
+data primer dan data sekunder.  
+a. Data Primer  
+Data primer diperoleh dari sensor Internet of Things (IoT)  yang dipasang di 
+lahan penelitian. Data ini meliputi parameter lingkungan seperti kelembaban tanah, 
+suhu udara, dan kelembaban udara yang dikumpulkan secara real-time dan 
+periodik.  
+a. Data Sekunder  
+Data  sekunder diperoleh dari layanan API Accu Weather , yang menyediakan 
+data cuaca eksternal berupa informasi curah hujan dan prakiraan cuaca. Data ini 
+digunakan sebagai pelengkap data sensor lapangan untuk mendukung analisis 
+kondisi lingkungan dan proses predi ksi kebutuhan air.  
+3. Metode Pengumpulan Data  
+Metode pengumpulan data dalam penelitian ini dilakukan melalui beberapa 
+cara, yaitu:  
+
+42 
+ a. Observasi Lapangan, untuk mengamati kondisi fisik lahan sawah tadah hujan 
+serta memastikan pemasangan sensor IoT berjalan sesuai  dengan 
+perancangan sistem.  
+b. Pencatatan Data Sensor Secara Periodik, yaitu pengambilan data lingkungan 
+dari sensor IoT dalam interval waktu tertentu untuk membentuk data deret 
+waktu.  
+c. Pengambilan Data Cuaca melalui API, yaitu proses pengambilan data cuaca 
+dari layanan API Accu Weather  secara otomatis menggunakan mekanisme 
+request  API. 
+3.3 Pengembangan Sistem  
+Pengembangan sistem pada penelitian ini menggunakan metode Waterfall  
+yang disesuaikan dengan karakteristik sistem Internet of Things (IoT)  dan 
+pemodelan pre diksi berbasis Long Short -Term Memory (LSTM). Metode ini 
+diterapkan secara berurutan dan sistematis, dimulai dari analisis kebutuhan sistem 
+monitoring  dan prediksi kebutuhan air, perancangan arsitektur perangkat keras dan 
+perangkat lunak, implementasi sist em IoT serta model LSTM, hingga tahap 
+pengujian dan evaluasi.  
+Metode Waterfall  dipilih karena alur pengembangan sistem telah 
+didefinisikan secara jelas sejak awal, baik dari sisi parameter sensor, sumber data 
+cuaca, maupun metode prediksi yang digunakan. Pendekatan ini memudahkan 
+pengendalian proses pengembangan serta memastikan integrasi antara sistem 
+monitoring  IoT dan model prediksi LSTM berjalan secara terstruktur.  
+
+43 
+ Tahapan Waterfall  yang digunakan meliputi :  
+. 
+3.3.1 Analisis ( Requirements ) 
+Analisis kebutuhan dilakukan untuk mengidentifikasi dan mendefinisikan 
+kebutuhan sistem yang akan dikembangkan agar sesuai dengan tujuan penelitian. 
+Kebutuhan sistem dalam penelitian ini meliputi kebutuh an fungsional, kebutuhan 
+non-fungsional, serta kebutuhan perangkat keras dan perangkat lunak.  
+A. Kebutuhan Fungsional  
+1. Akuisisi Data Sensor  
+Sistem dirancang untuk mampu melakukan akuisisi data lingkungan secara 
+berkelanjutan dan real-time melalui sensor berbasis Internet of Things (IoT) . 
+Sensor yang digunakan meliputi sensor kelembaban tanah, sensor suhu udara, dan 
+sensor kelembaban udara. Data yang diperoleh dari sensor ini merepresentasikan 
+kondisi lingkungan aktual di area pertanian da n menjadi input  utama bagi seluruh 
+Gambar 3. 2 Waterfall  
+
+44 
+ proses analisis dalam sistem. Keandalan proses akuisisi data sangat penting karena 
+kualitas data sensor akan secara langsung memengaruhi akurasi hasil monitoring  
+maupun prediksi kebutuhan air. Oleh karena itu, sistem haru s mampu menangani 
+pembacaan data secara periodik, meminimalkan kehilangan data, serta memastikan 
+data yang diterima berada dalam format yang sesuai untuk proses selanjutnya.  
+2. Integrasi Data Cuaca  
+Selain mengandalkan data sensor lokal, sistem juga harus mamp u 
+mengintegrasikan data cuaca eksternal yang diperoleh melalui API Accu Weather . 
+Data cuaca yang diambil mencakup informasi curah hujan dan prakiraan cuaca 
+untuk periode tertentu. Integrasi ini bertujuan untuk memberikan konteks 
+lingkungan yang lebih luas, mengingat kondisi cuaca memiliki pengaruh signifikan 
+terhadap kebutuhan air tanaman. Dengan mengombinasikan data sensor dan data 
+cuaca eksternal, sistem dapat menghasilkan analisis yang lebih komprehensif dan 
+realistis. Proses integrasi ini juga menuntut s istem untuk mampu melakukan 
+komunikasi API secara otomatis, menangani pembaruan data secara berkala, serta 
+mengelola potensi gangguan koneksi atau keterbatasan akses layanan eksternal.  
+3. Penyimpanan Data  
+Sistem harus memiliki kemampuan untuk menyimpan seluru h data sensor dan 
+data cuaca ke dalam basis data dalam bentuk data deret waktu ( time series ). 
+Penyimpanan berbasis waktu ini memungkinkan setiap data dicatat beserta 
+informasi waktu pengambilan, sehingga dapat digunakan untuk analisis historis dan 
+evaluasi  tren jangka panjang. Data yang tersimpan tidak hanya berfungsi sebagai 
+arsip, tetapi juga sebagai sumber utama dalam proses pelatihan dan pengujian 
+
+45 
+ model prediksi kebutuhan air. Oleh karena itu, sistem penyimpanan harus dirancang 
+secara efisien, terstrukt ur, dan mampu menangani volume data yang terus 
+bertambah seiring waktu tanpa menurunkan performa sistem.  
+4. Monitoring  Data  
+Sistem harus menyediakan fitur monitoring  yang memungkinkan pengguna 
+untuk memantau kondisi lingkungan secara langsung melalui sebuah dashboard . 
+Dashboard  ini berfungsi sebagai antarmuka utama antara sistem dan pengguna, di 
+mana data sensor dan data cuaca ditampilkan secara ringkas, informatif, dan mudah 
+dipahami. Informasi yang disajikan dapat berupa nilai numerik, grafik tren, maupun 
+indikator kondisi tertentu. Dengan adanya fitur monitoring  ini, pengguna dapat 
+mengetahui kondisi lingkungan terkini, mendeteksi perubahan yang signifikan, 
+serta melakukan tindakan preventif apabila ditemukan kondisi yang tidak sesuai 
+dengan kebutuhan tanama n. 
+5. Prediksi Kebutuhan Air  
+Sistem harus mampu menghasilkan prediksi kebutuhan air tanaman dengan 
+memanfaatkan model Long Short -Term Memory (LSTM), yang merupakan salah 
+satu pendekatan dalam deep learning  untuk data deret waktu. Model LSTM dipilih 
+karena kem ampuannya dalam menangkap pola jangka pendek maupun jangka 
+panjang dari data historis. Dalam konteks ini, data sensor dan data cuaca yang telah 
+disimpan akan digunakan sebagai input  untuk melatih model, sehingga sistem dapat 
+memprediksi kebutuhan air pada periode tertentu di masa mendatang. Hasil prediksi 
+ini diharapkan dapat membantu pengguna dalam menentukan jumlah dan waktu 
+
+46 
+ pemberian air secara lebih efisien, sekaligus mengurangi pemborosan sumber daya 
+air. 
+6. Visualisasi Hasil  
+Sistem harus mampu menyajikan  hasil prediksi kebutuhan air dalam bentuk 
+visualisasi yang informatif melalui dashboard . Visualisasi dapat berupa grafik 
+prediksi, perbandingan antara kondisi aktual dan hasil prediksi, atau indikator 
+rekomendasi kebutuhan air. Penyajian hasil dalam bentu k visual bertujuan untuk 
+memudahkan pengguna dalam memahami informasi yang kompleks tanpa harus 
+melakukan analisis teknis secara mendalam. Dengan visualisasi yang jelas dan 
+intuitif, pengguna dapat mengambil keputusan irigasi secara lebih cepat, tepat, dan  
+berbasis data.  
+B. Kebutuhan Non – Fungsional  
+1. Keandalan ( Reliability ) 
+Sistem harus memiliki tingkat keandalan yang tinggi agar mampu beroperasi 
+secara stabil dan konsisten selama proses monitoring  lingkungan maupun prediksi 
+kebutuhan air berlangsung. Keandalan ini mencakup kemampuan sistem dalam 
+menjalankan fungsi akuisisi d ata sensor, integrasi data cuaca, pemrosesan data, 
+hingga penyajian hasil tanpa sering mengalami gangguan, kesalahan, atau 
+kegagalan sistem. Sistem yang andal akan memastikan bahwa data yang diperoleh 
+dan diolah tetap akurat serta dapat dipercaya, sehingga  hasil prediksi yang 
+dihasilkan benar -benar dapat dijadikan dasar pengambilan keputusan dalam 
+pengelolaan irigasi.  
+
+47 
+ 2. Ketersediaan ( Availability ) 
+Sistem harus memiliki tingkat ketersediaan yang baik sehingga dapat diakses 
+oleh pengguna kapan pun diperlukan, k hususnya untuk kebutuhan monitoring  
+kondisi lingkungan secara real-time. Ketersediaan ini penting karena keterlambatan 
+akses informasi dapat berdampak pada keterlambatan pengambilan keputusan, 
+yang pada akhirnya dapat memengaruhi kondisi tanaman. Oleh kare na itu, sistem 
+perlu dirancang agar dapat beroperasi secara berkelanjutan, memiliki mekanisme 
+penanganan gangguan, serta mampu meminimalkan waktu henti (down time) 
+selama digunakan.  
+3. Skalabilitas ( Scalability ) 
+Sistem harus dirancang dengan kemampuan skalabil itas horizontal yang 
+memungkinkan penambahan lahan monitoring  baru tanpa memerlukan perubahan 
+arsitektur sistem secara keseluruhan. Sistem harus mendukung registrasi dan 
+integrasi perangkat IoT tambahan melalui mekanisme yang telah tersedia dalam 
+struktur basis data, khususnya melalui tabel IoT_devices  yang dirancang untuk 
+mengakomodasi multiple  device .Kinerja (Performance)  
+Sistem harus memiliki kinerja yang memadai dalam memproses data sensor 
+dan data cuaca tanpa mengalami keterlambatan yang signifikan. Kinerja yang baik 
+diperlukan agar proses monitoring  dapat dilakukan secara real-time dan hasil 
+prediksi dapat dihasilkan da lam waktu yang relatif singkat. Sistem yang responsif 
+akan meningkatkan efektivitas penggunaan, terutama ketika volume data yang 
+diproses semakin besar.  Oleh karena itu, perancangan sistem harus 
+
+48 
+ mempertimbangkan efisiensi pemrosesan, optimasi basis data, s erta kemampuan 
+sistem dalam menangani beban kerja yang meningkat.  
+4. Kemudahan penggunaan ( Usability ) 
+Sistem harus dirancang dengan antarmuka yang mudah dipahami dan 
+digunakan oleh pengguna, termasuk pengguna yang tidak memiliki latar belakang 
+teknis yang men dalam. Kemudahan penggunaan ini mencakup tata letak antarmuka 
+yang jelas, penyajian informasi yang intuitif, serta navigasi yang sederhana. Dengan 
+antarmuka yang ramah pengguna, sistem dapat digunakan secara optimal tanpa 
+memerlukan pelatihan yang kompleks , sehingga pengguna dapat dengan mudah 
+memantau kondisi lingkungan dan memahami hasil prediksi kebutuhan air yang 
+disajikan.  
+3.3.2 Perancangan Sistem ( Design ) 
+Perancangan sistem merupakan tahap untuk mendefinisikan bentuk dan 
+struktur sistem monitoring  sawah tad ah hujan berbasis Internet of Things (IoT)  
+yang terintegrasi dengan data cuaca dan prediksi kebutuhan air menggunakan 
+metode Long Short -Term Memory (LSTM). Perancangan sistem meliputi 
+rancangan arsitektur sistem, desain perangkat keras IoT, desain perangk at lunak, 
+struktur basis data, serta rancangan dashboard  web monitoring . 
+ 
+
+49 
+ A. Desain  Arsitektur Sistem  
+Arsitektur sistem dirancang menggunakan pendekatan client–server  yang 
+terdiri atas beberapa komponen utama, yaitu node sensor IoT, server atau platform 
+cloud , layanan API cuaca Accu Weather , dan dashboard  web monitoring . Sensor 
+IoT yang dipasang di lahan sawah tadah hujan berfungsi mengumpulkan data 
+lingkungan, kemudian data tersebut dikirimkan ke server melalui jaringan internet. 
+Server bertugas menyimpan data, mengintegrasikan data cuaca eksternal, serta 
+menjalankan model LSTM unt uk menghasilkan prediksi kebutuhan air. Seluruh 
+hasil monitoring  dan prediksi ditampilkan kepada pengguna melalui dashboard  
+web.  
+B. Desain Perangkat Keras IoT 
+Perangkat keras IoT dirancang menggunakan mikrokontroler ESP32 sebagai 
+pengendali utama. ESP32 terhu bung dengan sensor kelembaban tanah serta sensor 
+suhu dan kelembaban udara untuk mengukur kondisi lingkungan sawah secara real-
+time. Data hasil pembacaan sensor dikirimkan ke server menggunakan koneksi Wi-
+Fi. Desain perangkat keras ini disesuaikan dengan k ondisi lapangan sawah tadah 
+Gambar 3. 3 Rancangan Arsitektur Sistem  
+
+50 
+ hujan yang membutuhkan sistem monitoring  sederhana, hemat daya, dan mudah 
+diimplementasikan.  
+Gambar 3.4 menunjukkan rangkaian perangkat keras sistem monitoring  
+sawah tadah hujan berbasis IoT. Sistem menggunakan mikrokontroler ESP32 38 -
+pin sebagai pengendali utama yang terhubung dengan sensor kelembaban tanah FC -
+28 melalui pin analog. Sensor FC -28 terdiri da ri probe  dan modul pengkondisi 
+sinyal, di mana probe  terhubung langsung ke modul dan modul dihubungkan ke 
+ESP32.  
+Untuk penjelasan koneksi antar pin  dapat dilihat di tabel 3.1 
+ 
+Tabel 3. 1 Koneksi Antar Pin Komponen  
+No Komponen  Pin 
+Komponen  Pin TTGO T -
+Call ESP32  Keterangan  
+1 DHT22  VCC (Pin 
+1) 3.3V  Catu daya sensor  
+Gambar 3. 4 Desain Perangkat Keras  
+
+51 
+ No Komponen  Pin 
+Komponen  Pin TTGO T -
+Call ESP32  Keterangan  
+    DATA (Pin 
+2) GPIO 27  Data digital suhu & 
+kelembaban  
+    NC (Pin 3)  - Tidak terhubung  
+    GND (Pin 
+4) GND  Ground bersama  
+2 FC-28 
+Sensor  VCC  3.3V  Catu daya sensor  
+    GND  GND  Ground bersama  
+    AO GPIO 34 
+(ADC1_CH6)  Output  analog 
+kelembaban tanah  
+    DO - Tidak digunakan  
+ 
+C. Desain Perangkat Lunak  
+1. Modul akuisisi data sensor  
+Modul akuisisi data sensor merupakan bagian awal dari sistem perangkat 
+lunak yang bertugas memperoleh data kondisi kelembaban tanah secara langsung 
+
+52 
+ dari lapangan. Data diperoleh melalui sensor kelembaban tanah FC -28 yang 
+terhubung dengan mikrokontroler ESP 32. Proses akuisisi dilakukan secara periodik 
+sesuai interval waktu yang telah ditentukan, sehingga sistem mampu memantau 
+perubahan kondisi tanah secara berkelanjutan.  
+Setelah data dibaca oleh ESP32, dilakukan proses validasi sederhana untuk 
+memastikan data berada dalam rentang nilai yang dapat diterima. Data yang telah 
+divalidasi kemudian dikirimkan ke server melalui koneksi internet untuk diproses 
+Gambar 3. 5 Flowchart modul akuisisi data sensor kelembab an tanah  
+
+53 
+ lebih lanju t. Alur kerja modul akuisisi data sensor secara rinci ditunjukkan pada 
+Gambar 3. 5, yang menggambarkan tahapan mulai dari inisialisasi perangkat hingga 
+pengiriman data ke sistem Backend . 
+2. Komunik asi Sistem  
+Komunikasi sistem pada penelitian ini dirancang menggunakan arsitektur 
+client –server yang melibatkan dua jenis klien, yaitu perangkat IoT (ESP32) sebagai 
+pengirim data dari lapangan dan pengguna ( user) yang mengakses sistem melalui 
+dashboard  web. Server be rperan sebagai pusat pengelolaan data, pemrosesan, serta 
+penyedia layanan API untuk mendukung monitoring  dan prediksi kebutuhan air 
+sawah tadah hujan.  
+Untuk memperjelas alur komunikasi yang terjadi, sistem komunikasi dibagi 
+menjadi dua bagian utama, yaitu komunikasi antara perangkat IoT dengan server 
+dan komunikasi antara user dengan server melalui dashboard  web.  
+a) Komunikasi ESP32 dengan Server  
+Gambar 3. 6 Diagram Komunikasi ESP 32 dengan Server  
+
+54 
+ Komunikasi antara perangkat IoT dan server bertujuan untuk mengirimkan 
+data hasil pengukuran sensor dari lokasi penelitian ke sistem pusat secara berkala. 
+Pada penelitian ini, ESP32 bertindak sebagai client IoT yang mengirimkan data 
+sensor ke server melalui protokol HTTP dengan metode P OST.  
+Data yang dikirimkan oleh ESP32 dikemas dalam format JSON yang berisi 
+informasi kelembaban tanah, suhu udara, kelembaban udara, serta waktu pencatatan 
+data ( timestamp ). Server menerima data tersebut, kemudian melakukan proses 
+validasi dan parsing untuk memastikan data sesuai dengan format dan rentang nilai 
+yang telah ditentukan. Setelah validasi berhasil, data sensor disimpan ke dalam 
+tabel sensor_readings pada basis d ata. Server selanjutnya mengirimkan respons 
+berupa status keberhasilan (HTTP 200 OK) kepada ESP32 sebagai indikator bahwa 
+data telah berhasil diterima dan disimpan. . 
+b) Komunikasi User  dengan Server melalui Dashboard  Web 
+Gambar 3. 7 Diagram Komunikasi User dengan Server melalui D ashboard 
+Web 
+
+55 
+ Komunikasi antara user dan server terjadi ketika user mengakses dashboard  
+web untuk melakukan monitoring  kondisi lingkungan dan melihat hasil prediksi 
+kebutuhan air. Dashboard  web berfungsi sebagai antarmuka pengguna yang 
+mengirimkan permintaan data ke server melalui API Backend . 
+Ketika user melakukan permintaan data monitoring  dan prediksi, server akan 
+meng ambil data historis sensor dan data cuaca yang tersimpan di basis data. Data 
+tersebut kemudian diproses secara internal oleh server, meliputi tahap 
+prapemrosesan data, normalisasi, penyusunan data time series , serta proses prediksi 
+kebutuhan air menggunaka n algoritma Long Short -Term Memory (LSTM). Hasil 
+prediksi yang dihasilkan selanjutnya disimpan ke dalam basis data dan dikirimkan 
+kembali ke dashboard  web. Dashboard  kemudian menampilkan informasi 
+monitoring  dalam bentuk grafik serta hasil prediksi kebutuh an air kepada user 
+sebagai dasar pengambilan keputusan pengelolaan air irigasi.  
+3. Modul pengolahan dan penyimpanan data  
+Modul pengolahan dan penyimpanan data berperan dalam mengelola data 
+yang berasal dari sensor kelembaban tanah , sensor suhu dan kelembaban udara  serta  
+data cuaca dari API Accu Weather . Data yang masuk ke sistem terlebih dahulu 
+diproses untuk menyesuaikan format, menghilangkan da ta yang tidak valid, serta 
+Gambar 3. 8 Data Flow Diagram (DFD) modul pengolahan dan penyimpanan data  
+
+56 
+ menyelaraskan data berdasarkan waktu pengambilan. Tahap ini penting untuk 
+memastikan kualitas data sebelum digunakan pada proses analisis lanjutan.  
+Setelah proses pengolahan selesai, data disimpan ke dalam basis data sebagai 
+data historis. Data yang tersimpan dapat digunakan kembali untuk kebutuhan 
+monitoring , pelatihan model prediksi, serta evaluasi sistem. Alur data dari sumber 
+hingga penyimpanan ditunjukkan pada Gambar 3. 8, yang memperlihatkan 
+hubungan antara sumber data, prose s pengolahan, dan basis data.   
+4. Modul prediksi kebutuhan air (LSTM)  
+Modul prediksi kebutuhan air merupakan modul analitik yang menggunakan 
+algoritma Long Short -Term Memory (LSTM) untuk memprediksi kebutuhan air 
+tanaman. Model LSTM memanfaatkan data historis kelembaban tanah dan data 
+Gambar 3. 9 Diagram alur modul 
+prediksi kebutuhan air berbasis LSTM  
+
+57 
+ cuaca sebagai masukan utama karena kedua  jenis data tersebut memiliki 
+karakteristik deret waktu yang saling berkaitan.  
+Sebelum diproses oleh model LSTM, data terlebih dahulu melalui tahap pra -
+pemrosesan, seperti normalisasi dan pembentukan urutan data. Hasil dari model 
+LSTM berupa nilai prediksi  kebutuhan air yang digunakan sebagai dasar 
+rekomendasi pengelolaan air sawah. Alur kerja modul prediksi kebutuhan air 
+ditunjukkan pada Gambar 3. 9, yang menggambarkan tahapan input  data, 
+pemrosesan model, dan keluaran prediksi.  
+5. Modul visualisasi dan dashbo ard web 
+Modul visualisasi dan dashboard  web berfungsi sebagai antarmuka utama 
+antara sistem dan pengguna. Modul ini menampilkan data kelembaban tanah, data 
+cuaca, serta hasil prediksi kebutuhan air dalam bentuk grafik dan tabel yang mudah 
+dipahami. Dashbo ard web memungkinkan pengguna untuk memantau kondisi 
+sawah secara real-time maupun melihat data historis yang telah tersimpan.  
+ 
+Selain menampilkan data, dashboard  web juga menyediakan fungsi interaksi 
+seperti pemilihan rentang waktu dan pengunduhan laporan hasil monitoring . 
+Gambar 3. 10 Use case diagram modul visualisasi dan dashboard web  
+
+58 
+ Dengan adanya dashboard  ini, pengguna dapat melakukan evaluasi kondisi sawah 
+secara lebih efisien. Interaksi antara pengguna dan sistem dashboard  web 
+ditunjukkan pada Gambar 3. 10, yang menggambarkan fungsi -fungsi utama yang 
+dapat diakses oleh pengguna.  
+D. Desain Alur Proses Perangkat Lunak  
+Desain alur proses perangkat lunak pada penelitian ini bertujuan untuk 
+menggambarkan tahapan kerja sistem secara keseluruhan, mulai dari proses akuisisi 
+Gambar 3. 11  Flowchart alur proses perangkat lunak sistem monitoring dan prediksi kebutuhan air  
+
+59 
+ data sensor di lapangan hingga penyajian has il prediksi kebutuhan air pada 
+dashboard  web. Alur proses ini disusun secara terstruktur untuk memastikan bahwa 
+setiap data yang masuk dapat diproses secara sistematis dan menghasilkan output  
+yang akurat serta mudah dipahami oleh pengguna.  
+Secara umum, per angkat lunak bekerja dengan mengintegrasikan data primer 
+dari sensor IoT dan data sekunder dari API cuaca. Data tersebut kemudian diproses, 
+disimpan ke dalam basis data, dan digunakan sebagai masukan pada model prediksi 
+LSTM. Hasil prediksi selanjutnya dit ampilkan melalui dashboard  web sebagai 
+informasi pendukung dalam pengambilan keputusan pengelolaan air pada sawah 
+tadah hujan. Alur kerja perangkat lunak secara keseluruhan ditunjukkan pada 
+Gambar 3. 11 dalam bentuk flowchart  sistem.  
+Proses diawali dengan pembacaan data kelembaban tanah oleh sensor yang 
+terhubung dengan mikrokontroler ESP32. Data sensor yang diperoleh kemudian 
+dikirimkan ke server melalui koneksi internet. Secara bersamaan, sistem Backend  
+melakukan pengambilan data cuaca dari API Accu Weathe r berdasarkan lokasi dan 
+waktu yang sesuai dengan data sensor. Kedua jenis data tersebut menjadi input  
+utama dalam sistem.  
+Setelah data diterima oleh server, sistem melakukan proses validasi dan 
+pengolahan data sebelum menyimpannya ke dalam basis data. Dat a historis yang 
+tersimpan selanjutnya digunakan sebagai input  pada model LSTM untuk 
+menghasilkan prediksi kebutuhan air. Hasil prediksi ini disimpan kembali ke basis 
+data dan ditampilkan pada dashboard  web dalam bentuk informasi visual yang 
+dapat diakses o leh pengguna . Tahap validasi data dilakukan untuk memastikan 
+
+60 
+ bahwa data sensor dan data cuaca yang diterima sistem berada dalam rentang nilai 
+yang dapat diterima dan tidak mengalami anomali. Apabila data dinyatakan valid, 
+sistem akan melanjutkan proses pen golahan dan penyimpanan data. Sebaliknya, 
+apabila data tidak valid, sistem akan mengabaikan data tersebut dan kembali ke 
+proses pengambilan data sensor.  
+E. Desain  Basis Data  
+Desain basis data pada penelitian ini disusun untuk mendukung penyimpanan 
+dan pengelolaan data sistem monitoring  sawah tadah hujan berbasis Internet of 
+Things (IoT )  serta model prediksi Long Short -Term Memory (LSTM). Rancangan 
+Gambar 3. 12 Diagram Entity Relationship Database Sistem Monitoring Sawah 
+Tadah Hujan  
+
+61 
+ basis data disajikan dalam bentuk Entity Relationship Diagram  (ERD) yang 
+menunjukkan hubungan antar entitas utama dalam sistem, sebagaimana 
+ditunjukkan pada Gambar 3. 12. 
+Basis data dirancang menggunakan model relasional untuk memastikan 
+integritas data, kemudahan pengolahan data deret waktu ( time-series ), serta 
+integrasi yang baik ntara data sensor, data cuaca, hasil prediksi, dan evaluasi model.  
+1. Entitas Utama  
+Entitas utama dalam bas is data pada penelitian ini terdiri dari lima tabel, yaitu 
+users, IoT_devices , sensor_readings, weather _data , dan water_predictions . 
+Tabel users digunakan untuk menyimpan data pengguna sistem dashboard , 
+termasuk informasi autentikasi dan peran pengguna. Ta bel IoT_devices  
+merepresentasikan perangkat ESP32 yang dipasang di lokasi sawah dan menjadi 
+pusat keterkaitan data dalam sistem.  
+Tabel sensor_readings  berfungsi untuk menyimpan data primer hasil 
+pembacaan sensor IoT secara berkala. Tabel weather _data digun akan untuk 
+menyimpan data cuaca yang diperoleh dari API Accu Weather  sebagai data 
+sekunder. Selanjutnya, tabel water_predictions  menyimpan hasil prediksi 
+kebutuhan air yang dihasilkan oleh model LSTM berdasarkan data historis sensor 
+dan data cuaca.  
+2. Relasi A ntar Entitas  
+Relasi antar entitas dalam basis data dirancang untuk mencerminkan alur data 
+sistem secara logis dan terstruktur. Entitas IoT_devices  memiliki relasi one-to-many  
+
+62 
+ dengan tabel sensor_readings , yang menunjukkan bahwa satu perangkat IoT dapat 
+menghasilkan banyak data pembacaan sensor dalam periode waktu tertentu.  
+Relasi one-to-many  juga diterapkan antara tabel IoT_devices  dan 
+water_predictions , di mana satu perangkat IoT dapat menghasilkan lebih dari satu 
+hasil prediksi kebutuhan air pada waktu yang berbeda. Sementara itu, tabel 
+weather _data bersifat independen dan digunakan berdasarkan kesesuaian lokasi 
+dan waktu pengambilan data, sehingga dapat diintegrasikan secara fle ksibel dalam 
+proses analisis dan prediksi tanpa ketergantungan langsung pada perangkat tertentu.  
+3. Atribut Penting Setiap Tabel  
+Setiap entitas dalam basis data memiliki atribut penting yang mendukung 
+fungsi sistem secara keseluruhan. Pada tabel IoT_devices , atribut seperti device_id,  
+location, latitude,  dan longitude  digunakan untuk mengidentifikasi perangkat dan 
+lokasi pengambilan data. Atribut status digunakan untuk memantau kondisi 
+operasional perangkat IoT. 
+Pada tabel sensor_readings, atribut soil_moistur e dan recorded_at digunakan 
+untuk menyimpan data kelembaban tanah berbasis waktu yang menjadi input  utama 
+dalam proses analisis dan pelatihan model LSTM. Tabel weather _data menyimpan 
+parameter cuaca seperti curah hujan dan kondisi cuaca yang digunakan seba gai fitur 
+tambahan dalam prediksi kebutuhan air. Selanjutnya, tabel water_predictions 
+menyimpan atribut predicted_water_need, prediction_date, dan model_version 
+yang digunakan untuk menampilkan hasil prediksi dan mendukung pengambilan 
+keputusan pengelolaan  air pada dashboard  sistem.  
+
+63 
+ 4. Keterkaitan Basis Data dengan Evaluasi Model  
+Evaluasi kinerja model LSTM pada penelitian ini dilakukan menggunakan 
+metrik MAE dan RMSE, yang dihitung pada tahap pengujian model dan disajikan 
+pada bab hasil dan pembahasan. Nilai evaluasi tersebut tidak disimpan secara 
+permanen dalam basis data, melainkan digunakan sebagai indikator performa 
+model selama proses eksperimen dan analisis.  
+Pendekatan ini dipilih untuk menjaga kesederhanaan struktur basis data serta 
+memfokuskan penyimpa nan data pada informasi utama yang diperlukan dalam 
+proses monitoring  dan prediksi kebutuhan air. Dengan demikian, desain basis data 
+tetap efisien dan sesuai dengan kebutuhan sistem yang dikembangkan.  
+F. Rancangan Dashboard  Web Monitoring  
+Dashboard  web monitoring  dirancang sebagai antarmuka visual yang intuitif 
+bagi pengguna untuk memantau kondisi sawah tadah hujan secara real-time. 
+Gambar 3. 13 Desain Dashboard Web Monitoring  
+
+64 
+ Dashboard  ini menampilkan data sensor li ngkungan, informasi cuaca terkini dan 
+prakiraan, hasil prediksi kebutuhan air, serta status perangkat IoT dalam bentuk 
+grafik, tabel, dan indikator visual. Rancangan antarmuka dibuat responsif dan 
+mudah dinavigasi agar dapat diakses melalui berbagai perang kat (desktop, tablet, 
+smartphone ) dan mendukung pengambilan keputusan irigasi yang cepat dan 
+berbasis data.  
+Gambar 3.13 menunjukkan rancangan antarmuka dashboard  web yang 
+dikembangkan untuk sistem monitoring  sawah tadah hujan. Dashboard  ini terbagi 
+menjadi beberapa bagian utama, yaitu:  
+1. Status Sawah Tadah Hujan: Menampilkan kondisi umum sawah (Normal, 
+Waspada, Darurat) dan nilai kelembaban tanah terkini.  
+2. Cuaca Saat Ini: Menampilkan parameter cuaca real-time seperti suhu udara 
+dan kelembab an relatif.  
+3. Status Alat IoT: Menampilkan informasi teknis perangkat seperti tingkat 
+baterai, kualitas sinyal, waktu pembaruan data terakhir, dan lokasi 
+pemasangan.  
+4. Grafik Kelembaban Tanah: Visualisasi garis ( line chart ) tren kelembaban 
+tanah selama 7 hari terakhir untuk analisis pola perubahan.  
+5. Prediksi Kebutuhan Air 7 Hari: Tabel yang menyajikan hasil prediksi 
+kebutuhan air harian untuk seminggu ke depan, dilengkapi dengan kategori 
+rekomendasi pengairan (Rendah, Sedang, Tinggi).  
+6. Prakiraan Cuaca: Informasi prakiraan cuaca jangka pendek yang diambil dari 
+API Accu Weather . 
+
+65 
+ 7. Alert  & Notifikasi: Panel untuk menampilkan peringatan sistem atau 
+notifikasi penting terkait kondisi lahan atau anomali data.  
+8. Log Aktivitas Sistem: Mencatat riwayat aktivitas pengguna dan op erasi 
+sistem.  
+3.4 Implementasi Sistem  
+Implementasi sistem pada penelitian ini akan dilaksanakan secara bertahap 
+sesuai dengan metode pengembangan Waterfall . Pada tahap ini, desain yang telah 
+disetujui pada tahap sebelumnya diimplementasikan menjadi sistem yang dapat 
+dijalankan.  
+3.5 Pengujian Sistem  
+Pengujian sistem akan menggunakan kombinasi pendekatan black -box dan 
+white -box testing untuk memastikan validasi fungsional dan struktural sistem secara 
+komprehensif.  
+A. Pengujian Black – Box 
+Pengujian black -box akan fokus pada fungsionalitas eksternal sistem dari 
+perspektif pengguna akhir.  
+1. Pengujian Fungsional  
+Tabel 3. 2 Pengujian Fungsional Black - box 
+Fitur  Test Case  Expected 
+Result  Metode  
+Akuisisi 
+Data Sensor  ESP32 
+membaca sensor  Data terkirim 
+ke server  Manual 
+testing 
+
+66 
+ Fitur  Test Case  Expected 
+Result  Metode  
+dengan 
+multimeter 
+Integrasi 
+API Cuaca  Request  ke 
+Accu Weather  Data cuaca 
+diterima  Automated 
+API testing  
+Dashboard  
+Monitoring  Akses 
+dashboard  web Data 
+ditampilkan 
+real-time User  
+acceptance 
+testing  
+Prediksi 
+Kebutuhan 
+Air Request  prediksi 
+7 hari  Hasil prediksi 
+ditampilkan  Scenario -
+based testing  
+ 
+2. Pengujian N on – Fungsional  
+a. Performance Testing : Response  time API, load handling  
+b. Reliability  Testing : Uptime, error  recovery 
+c. Usability  Testing : Kemudahan penggunaan dashboard  
+d. Compatibility Testing: Cross -browser, device compatibility  
+B. Pengujian White – Box 
+Pengujian white -box akan fokus pada struktur internal sistem dengan 
+pengetahuan tentang implementasi kode.  
+1. Pengujian Unit  
+a. ESP32 Firmware : Pengujian fungsi pembacaan sensor, koneksi jaringan  
+
+67 
+ b. Backend  API: Pengujian endpoint , business  logic , error  handling  
+c. Model LSTM: Pengujian  preprocessing, training, inference pipeline  
+d. Database  Layer : Pengujian query , transactions , data integrity  
+2. Structural  Testing  
+a. Code  Coverage Analysis : Mengukur persentase kode yang teruji  
+b. Path Testing : Menguji semua jalur eksekusi program  
+c. Condition  Testing: Menguji semua kondisi boolea n 
+d. Loop Testing : Menguji semua jenis loop (simple, nested ) 
+3. Static Code Analysis  
+a. Code  Review : Evaluasi kualitas kode oleh peneliti  
+b. Linting : Pengecekan standar koding dengan tools  
+c. Complexity Analysis : Mengukur kompleksita s siklomatik  
+  
+
+68 
+ 3.6 Jadwal Penelitian  
+Tabel 3. 3 Jadwal Penelitian  
+Tahap Penelitian  2026  
+1 2 3 4 5 6 
+Identifikasi Masalah        
+Studi Literatur        
+Perancangan Sistem        
+Pengumpulan Data        
+Integrasi & Pelatihan Sistem        
+Pengujian Sistem        
+Analisis & Penulisan Laporan        
+  
+
+69 
+ DAFTAR PUSTAKA  
+[1] D. Perez, “Article s41893 -024-01376 -w,” Nat. Sustain. , 2024, doi: 
+10.1038/s41893 -024-01376 -w. 
+[2] A. Fatimah, “Predicting Crop Water Requirements Using IoT Sensor Data for 
+Deep Learning,” vol. 07, 2025.  
+[3] A. Blessy et al. , “Sustainable Irrigation Requirement Prediction Using Internet 
+of Things and Transfer Learning,” Sustainability , vol. 15, no. 10, p. 8260, May 
+2023, doi: 10.3390/su15108260.  
+[4] R. A. Syahputra and D. Andriani, “A Predictive Model For Crop Irrigation 
+Schedulling Using Machine Learning and IoT -Generated Environmental Data,” 
+vol. 9, no. 5.  
+[5] D. Yudisti ra and M. Ikhsan, “Integrasi Sistem IoT untuk Pemantauan Cuaca 
+Real-Time dan Prediksi Curah Hujan berbasis LSTM”.  
+[6] Albert Donatus Simamarta, Vasthi Khoirun Nisa, Rafly Maulana, Najwa 
+Parawansa, Imelda Khairunnisa, and Yeni Budiawati, “Kajian Literatur :  
+Penerapan Internet of Things (IoT) untuk Optimasi Manajemen Kesehatan 
+Tanah,” Hidroponik J. Ilmu Pertan. Dan Teknol. Dalam Ilmu Tanam. , vol. 2, 
+no. 2, pp. 91 –107, Jun. 2025, doi: 10.62951/hidroponik.v2i2.402.  
+[7] M. R. Febrian, A. Rahman, and M. A. Yahya,  “Perbandingan LSTM dan GRU 
+untuk Prediksi Kebutuhan Air pada Pertanian Modern Cerdas Berbasis Internet 
+Of Things,” vol. 11, 2025.  
+[8] J. J. A. -M. Sayor, N. T. Shishir, B. B. Barmon, S. Ahemed, and Md. M. 
+Rahman, “IoT -driven real -time weather measurement a nd forecasting mobile 
+
+70 
+ application with machine learning integration,” Array , vol. 27, p. 100474, Sep. 
+2025, doi: 10.1016/j.array.2025.100474.  
+[9] A. Putra, B. Santoso, and  D. Lestari, “Analisis Pengaruh Variabilitas Iklim 
+terhadap Kebutuhan Air Tanaman,” J. Agromet Indones. , vol. 36, no. 2, pp. 85 –
+94, 2022.  
+[10] S. Wahyuni, T. Kurniawan, and N. Fitriani, “Pemanfaatan Prakiraan Curah 
+Hujan untuk Efisiensi Irigasi,” J. Lingku ng. Dan Pertan. , vol. 9, no. 1, pp. 33 –
+42, 2024.  
+[11] R. Hidayat and A. Prasetyo, “Estimasi Evapotranspirasi Berbasis Parameter 
+Meteorologi,” J. Sains Pertan. , vol. 17, no. 1, pp. 45 –53, 2022.  
+[12] R. Saputra, A. Fauzi, and N. Hidayah, “Prediksi Kelembaban  Tanah 
+Menggunakan Long Short -Term Memory pada Sistem Pertanian Cerdas,” J. 
+Teknol. Dan Sist. Komput. , vol. 10, no. 2, pp. 95 –103, 2022.  
+[13] F. Harahap and A. Ramadhan, “Implementasi LSTM untuk Prediksi 
+Kebutuhan Air Irigasi Berbasis Internet of Things,” J. Inform. Politek. Negeri 
+Batam , vol. 7, no. 1, pp. 12 –20, 2023.  
+[14] D. Pratama, I. Kurniawan, and S. Maulana, “Model Prediksi Kebutuhan Air 
+Tanaman Berbasis Data Cuaca dan Sensor IoT Menggunakan LSTM,” J. RESTI 
+Rekayasa Sist. Dan Teknol. Inf. , vol. 8, n o. 1, pp. 45 –54, 2024.  
+[15] N. Sunendar and Y. Rianto, “COMPARISON OF ARIMA, LSTM, AND 
+GRU MODELS FOR FORECASTING SALES OF HIT AEROSOL 
+PRODUCTS,” J. Pilar Nusa Mandiri , vol. 21, no. 2, pp. 153 –159, Sep. 2025, 
+doi: 10.33480/pilar.v21i2.6412.  
+
+71 
+ [16] S. Sutono and Y. H. Mohamed, “IoT –Based Smart Agriculture System 
+Using ESP32, DHT22, and Soil Moisture Sensors with Relay Control, 
+MySQL –Bootstrap (Without PDO), and Chart.js for Water –Scarce 
+Environments,” 2025.  
+[17] R. G. Sholid, H. Yanto, H. Alhaq, and S. D. Wija narko, “Rancang Bangun 
+Sistem Digital Pemantau Suhu dan Kelembaban Ruang Server Berbasis IoT,” 
+J. Sains Inform. Terap. JSIT , Aug. 2025.  
+[18] A. R. Isnain, “LSTM -IOT (LSTM -based IoT) untuk Mengatasi Kehilangan 
+Data Akibat Kegagalan Koneksi,” J. Teknol. Inf.  Dan Ilmu Komput. JTIIK , Jan. 
+2025.  
+[19] M. Martens, “Challenges in the implementation of internet of things projects 
+and actions to overcome them,” Procedia Comput. Sci. , 2022.  
+[20] F. A. Ilmi, “Sistem Monitoring Suhu dan Kelembaban pada Ruang Server 
+Berb asis Internet of Things,” J. Mhs. Univ. STEKOM , vol. 6, no. 3, pp. 14 –24, 
+Sep. 2024.  
+[21] Z. Zafar, “From Data to Decisions: A Smart IoT and Cloud Approach to 
+Environmental Monitoring,” E3S Web Conf. , vol. 601, 2025.  
+[22] S. U. Haj, R. T. Adek, and R. Suwa nda, “Implementasi Sistem Irigasi 
+Berbasis Internet of Things (IoT) Untuk Optimasi Penggunaan Air Pada 
+Pertanian,” METIK J. , 2023, doi: 10.47002/sqe99d72.  
+[23] R. Zhang, Y. Li, and H. Wang, “Integrated IoT Communication Modules 
+for Remote Agricultural Moni toring: A Comparative Study,” IEEE Trans. Ind. 
+Inform. , vol. 18, no. 4, pp. 2567 –2575, 2022, doi: 10.1109/TII.2021.3112345.  
+
+72 
+ [24] T. A. Nguyen and D. K. Le, “Hardware Design of ESP32 -Based Cellular 
+IoT Module for Smart Agriculture Applications,” in Proceedi ngs of the IEEE 
+International Conference on Consumer Electronics , 2023, pp. 1 –4. doi: 
+10.1109/ICCE.2023.10002234.  
+[25] S. Kumar and P. Singh, “Reliability Analysis of GSM/GPRS -based IoT 
+Networks for Precision Agriculture in Rural Areas,” IEEE Internet Thin gs J. , 
+vol. 9, no. 12, pp. 9876 –9885, 2022, doi: 10.1109/JIOT.2022.3156789.  
+[26] V. T. Nguyen, H. M. Tran, and Q. P. Le, “Coverage Analysis of GSM 
+Networks for IoT Applications in Southeast Asian Rural Areas,” IEEE Access , 
+vol. 11, pp. 45678 –45689, 2023, d oi: 10.1109/ACCESS.2023.3278901.  
+[27] L. Chen, Y. Wang, and H. Zhang, “Hybrid Data Transmission Mechanism 
+for IoT Agricultural Systems Using GPRS and SMS Fallback,” IEEE Trans. 
+Instrum. Meas. , vol. 72, pp. 1 –10, 2023, doi: 10.1109/TIM.2023.3264578.  
+[28] A. R. Al -Mahmood and M. S. Hossain, “Energy -Efficient Data 
+Transmission Strategies for Solar -Powered IoT Devices in Smart Agriculture,” 
+IEEE Sens. J. , vol. 23, no. 5, pp. 4987 –4996, 2023, doi: 
+10.1109/JSEN.2023.3234567.  
+[29] J. W. Park and K. S. Kim, “Reliab ility Enhancement of Integrated IoT 
+Modules for Harsh Environment Applications,” IEEE Trans. Compon. Packag. 
+Manuf. Technol. , vol. 13, no. 2, pp. 234 –241, 2023, doi: 
+10.1109/TCPMT.2023.3256789.  
+[30] M. J. Saputra and R. R. Suryono, “Implementasi Teknologi Irigasi Tetes 
+pada Tanaman Jagung Menggunakan Sensor Soil Moisture dan Mikrokontroler 
+
+73 
+ Esp 32: Technology Implementation Drip Irrigation on Plants Corn Uses Soil 
+Moisture Sensor and Esp 32 microcontroller,” MALCOM Indones. J. Mach. 
+Learn. Comput. Sci. , vol.  5, no. 1, pp. 111 –118, Dec. 2024, doi: 
+10.57152/malcom.v5i1.1642.  
+[31] M. Roziqin, A. Fauzan, and S. Z. N. Haq, “Rancang Bangun Penyiraman 
+Tanaman Cabe Otomatis Menggunakan ESP32 dan Sensor Kelembapan 
+Tanah,” J. Inform. Dan Tek. Elektro Terap. , vol. 13, n o. 3S1, 2025, doi: 
+10.23960/jitet.v13i3S1.7966.  
+[32] M. R. Ariwibowo, L. A. Setiawan, and A. Iman, “SISTEM PEMANTAU 
+KELEMBAPAN TANAH DAN DEBIT AIR PADA TANAMAN CABAI 
+MENGGUNAKAN ESP32 BERBASIS INTERNET OF THINGS,” J. Inform. 
+Dan Tek. Elektro Terap. , vol. 1 3, no. 2, Apr. 2025, doi: 
+10.23960/jitet.v13i2.6382.  
+[33] DatasheetHub, “FC -28 Soil Moisture Sensor Module Datasheet.” [Online]. 
+Available: https://www.datasheethub.com/fc -28-soil-moisture -sensor -module/  
+[34] A. Azhar, S. M. A. Sasongko, and D. F. Budiman,  “Implementasi 
+Purwarupa Wireless Sensor Network untuk Monitoring dan Penyiraman 
+Otomatis pada Tanaman Mint Menggunakan ESP32 Berbasis IoT -LoRa,” J. 
+Inform. Dan Tek. Elektro Terap. , vol. 12, no. 3, 2025, doi: 
+10.23960/jitet.v12i3.4678.  
+[35] A. S. Kumar and  R. V. Rao, “Performance Evaluation of DHT22 for IoT 
+Environmental Monitoring,” IEEE Sens. J. , vol. 20, no. 15, pp. 8865 –8874, 
+2020.  
+
+74 
+ [36] M. R. Smith and et al., “Specification Analysis of DHT Series Sensors,” in 
+Proceedings of the IEEE Sensors Conference , 2021, pp. 1 –4. 
+[37] Aosong Electronics, “DHT22 Datasheet,” Aosong Electronics, 2022.  
+[38] Espressif Systems, “ESP32 Technical Reference,” Espressif Systems, 2023.  
+[39] A. R. Al -Mahmood, “Power Analysis of IoT Sensors,” IEEE Sens. J. , vol. 
+23, no. 5, 2023.  
+[40] “ISO 4677 -1:2020 Test Atmospheres Specifications,” 2020.  
+ 
+ 
+

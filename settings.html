@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan - Sistem Monitoring IoT</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Cropper CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-white text-gray-800 font-sans h-screen flex overflow-hidden dark:bg-gray-900">
+    <!-- Left Sidebar -->
+    <aside class="w-64 border-r border-gray-200 dark:border-gray-800 flex flex-col h-full bg-[#fcfcfc] dark:bg-gray-900 hidden md:flex shrink-0">
+        <!-- Top Profile & Back -->
+        <div class="p-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+            <div class="flex items-center space-x-3 w-full">
+                <a href="index.html" class="text-blue-600 bg-blue-50 dark:bg-blue-900/30 p-2 rounded-lg hover:bg-blue-100 transition shrink-0">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <img id="sidebar-profile-img" src="https://ui-avatars.com/api/?name=Admin+Sawah&background=4caf50&color=fff" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0">
+                <div class="overflow-hidden min-w-0">
+                    <p class="font-bold text-sm truncate dark:text-gray-200" id="display-name">Admin</p>
+                    <p class="text-xs text-gray-500 truncate dark:text-gray-400" id="display-email">admin@konsel.ac.id</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Categories -->
+        <div class="p-4 overflow-y-auto flex-1">
+            <div class="mb-6">
+                <p class="text-xs font-bold text-gray-400 mb-3 px-3 uppercase tracking-wider">ACCOUNT</p>
+                <nav class="space-y-1">
+                    <button onclick="switchTab('profile')" id="tab-btn-profile" class="tab-btn active w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg bg-blue-50 text-blue-700 transition">
+                        <i class="fas fa-user w-5 mr-2 opacity-70"></i> My Profile
+                    </button>
+                    <button onclick="switchTab('notification')" id="tab-btn-notification" class="tab-btn w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <i class="fas fa-bell w-5 mr-2 opacity-70"></i> Notifications
+                    </button>
+                </nav>
+            </div>
+
+            <div>
+                <p class="text-xs font-bold text-gray-400 mb-3 px-3 uppercase tracking-wider">WORKSPACE</p>
+                <nav class="space-y-1">
+                    <button onclick="switchTab('location')" id="tab-btn-location" class="tab-btn w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <i class="fas fa-map-marker-alt w-5 mr-2 opacity-70"></i> Location Settings
+                    </button>
+                    <button onclick="switchTab('calibration')" id="tab-btn-calibration" class="tab-btn w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <i class="fas fa-sliders-h w-5 mr-2 opacity-70"></i> Sensor Settings
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="md:hidden w-full p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-white dark:bg-gray-900 shrink-0 absolute top-0 z-20">
+        <a href="index.html" class="text-blue-600"><i class="fas fa-arrow-left"></i> Back</a>
+        <h1 class="font-bold dark:text-white">Settings</h1>
+        <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-gray-900 relative w-full pt-16 md:pt-0">
+        <div class="flex-1 overflow-y-auto p-6 md:p-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-8 flex items-center text-gray-500 text-sm hidden md:flex">
+                    <span class="font-medium text-gray-800 dark:text-gray-200 text-xl">Settings</span>
+                    <i class="fas fa-chevron-right text-xs mx-3 text-gray-400"></i>
+                    <span id="breadcrumb-current" class="text-gray-500 text-xl">My Profile</span>
+                </div>
+                
+                <div class="w-full">
+                    <!-- Tab: Profile -->
+                <div id="tab-profile" class="tab-content w-full">
+                    <h2 class="text-2xl font-bold mb-8 dark:text-white border-b pb-4">My Profile</h2>
+                    <form id="form-profile" class="space-y-4 max-w-lg">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <img id="preview-photo" src="https://ui-avatars.com/api/?name=Admin+Sawah&background=4caf50&color=fff&size=100" alt="Preview" class="w-20 h-20 rounded-full border-2 border-green-300 object-cover shadow-sm">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1 text-sm">Foto Profil</label>
+                                <input type="file" id="input-photo" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 transition cursor-pointer">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Lengkap</label>
+                            <input type="text" id="input-name" value="Admin Penelitian" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Email</label>
+                            <input type="email" id="input-email" value="admin@konsel.ac.id" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Instansi / Universitas</label>
+                            <input type="text" id="input-instansi" value="Universitas Halu Oleo" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white outline-none transition">
+                        </div>
+                        <div class="pt-4">
+                            <button type="button" onclick="saveProfile()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow transition flex items-center">
+                                <i class="fas fa-save mr-2"></i> Simpan Profil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tab: Location -->
+                <div id="tab-location" class="tab-content w-full hidden">
+                    <h2 class="text-2xl font-bold mb-8 dark:text-white border-b pb-4">Location Settings</h2>
+                    <div class="mb-4 bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg text-blue-800 dark:text-blue-300 text-sm flex items-start">
+                        <i class="fas fa-info-circle mt-1 mr-3 text-lg"></i>
+                        <div>
+                            <p class="font-bold mb-1">Panduan Multi-Sawah:</p>
+                            <p>Anda bisa mendaftarkan beberapa alat IoT untuk sawah yang berbeda. Luas lahan (Area) yang Anda masukkan akan digunakan AI untuk menghitung Volume Kebutuhan Air (Liter). Tidak peduli bentuk sawahnya (persegi, persegi panjang, atau segitiga), cukup masukkan <b>total luas area</b>-nya.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">ID Sawah (Kode Unik)</label>
+                            <input type="text" id="input-field-id" placeholder="Misal: sawah_001" value="sawah_001" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Nama Sawah / Blok</label>
+                            <input type="text" id="input-loc-name" placeholder="Misal: Blok A" value="Andoolo, Konawe Selatan" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">ID Alat ESP32 Terpasang</label>
+                            <input type="text" id="input-device-id" placeholder="Misal: esp32_001" value="esp32_001" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Luas Lahan (Area dalam mÂ²)</label>
+                            <input type="number" id="input-area-size" placeholder="Luas Area Total" value="1500" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Latitude (Garis Lintang)</label>
+                            <input type="text" id="input-lat" value="-4.433" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Longitude (Garis Bujur)</label>
+                            <input type="text" id="input-lng" value="122.250" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Tanggal Mulai Tanam / Sebar Benih</label>
+                            <input type="date" id="input-plant-date" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Metode Tanam</label>
+                            <select id="input-plant-method" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white bg-white">
+                                <option value="tanam_pindah">Tanam Pindah (Bibit)</option>
+                                <option value="tabela">Tabela (Tanam Benih Langsung)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Peta Container -->
+                    <div class="mb-3 flex gap-2">
+                        <div class="relative flex-grow">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" id="map-search-input" placeholder="Cari nama daerah, desa, atau jalan..." class="w-full pl-10 p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white" onkeydown="if(event.key === 'Enter') searchMap()">
+                        </div>
+                        <button type="button" onclick="searchMap()" class="bg-gray-800 hover:bg-gray-900 text-white font-bold px-6 py-3 rounded-lg shadow transition flex items-center">
+                            Cari
+                        </button>
+                    </div>
+                    <div id="map" class="w-full h-[400px] rounded-lg border-2 border-gray-200 dark:border-gray-700 shadow-inner mb-6 z-10"></div>
+                    <div class="pt-2 border-t border-gray-100 dark:border-gray-700 flex space-x-3 mb-8">
+                        <button type="button" onclick="saveLocation()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow transition flex items-center">
+                            <i class="fas fa-save mr-2"></i> Simpan / Tambah Sawah Baru
+                        </button>
+                    </div>
+
+                    <!-- DAFTAR ALAT & SAWAH TERDAFTAR -->
+                    <h3 class="text-xl font-bold mb-4 dark:text-white border-b pb-2">Daftar Sawah & Alat Terhubung</h3>
+                    <div class="overflow-x-auto bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm">
+                                    <th class="p-3 border-b border-gray-300 dark:border-gray-600">ID Sawah</th>
+                                    <th class="p-3 border-b border-gray-300 dark:border-gray-600">Nama Sawah</th>
+                                    <th class="p-3 border-b border-gray-300 dark:border-gray-600">ID Alat</th>
+                                    <th class="p-3 border-b border-gray-300 dark:border-gray-600">Luas (mÂ²)</th>
+                                    <th class="p-3 border-b border-gray-300 dark:border-gray-600 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fields-table-body" class="text-gray-800 dark:text-gray-200 text-sm">
+                                <tr>
+                                    <td colspan="5" class="p-4 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i>Memuat data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab: Calibration -->
+                <div id="tab-calibration" class="tab-content w-full hidden">
+                    <h2 class="text-2xl font-bold mb-8 dark:text-white border-b pb-4">Sensor Settings</h2>
+                    <div class="mb-6 bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded-lg text-yellow-800 dark:text-yellow-300 text-sm flex items-start">
+                        <i class="fas fa-exclamation-triangle mt-1 mr-3 text-lg"></i>
+                        <p>Ubah nilai kalibrasi ini jika terdapat selisih pembacaan antara sensor dengan alat ukur standar. Nilai ini akan disimpan di Firebase dan diaplikasikan langsung ke data dashboard.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Pilih Alat IoT (Sensor) yang akan dikalibrasi:</label>
+                        <select id="cal-device-select" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white bg-white" onchange="loadCalibrationData(this.value)">
+                            <option value="">-- Memuat Daftar Alat... --</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-6 max-w-2xl">
+                        <!-- DHT22 Calibration -->
+                        <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <h3 class="font-bold text-lg mb-3 flex items-center dark:text-white">
+                                <i class="fas fa-temperature-half text-orange-500 mr-2"></i> Kalibrasi DHT22 (Suhu & Kelembaban Udara)
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Suhu Offset (Â°C)</label>
+                                    <input type="number" step="0.1" id="cal-temp" value="0.0" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Kelembaban Udara Offset (%)</label>
+                                    <input type="number" step="1" id="cal-hum" value="0" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FC-28 Calibration -->
+                        <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <h3 class="font-bold text-lg mb-3 flex items-center dark:text-white">
+                                <i class="fas fa-leaf text-green-500 mr-2"></i> Kalibrasi FC-28 (Kelembaban Tanah)
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Nilai ADC Udara (Kering 0%)</label>
+                                    <input type="number" id="cal-dry" value="4095" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                                    <p class="text-xs text-gray-500 mt-1">Nilai standar ESP32: 4095</p>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Nilai ADC Air (Basah 100%)</label>
+                                    <input type="number" id="cal-wet" value="1500" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                                    <p class="text-xs text-gray-500 mt-1">Sesuai eksperimen air</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="button" onclick="saveCalibration()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow transition flex items-center">
+                                <i class="fas fa-sync-alt mr-2"></i> Terapkan Kalibrasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Notification -->
+                <div id="tab-notification" class="tab-content w-full hidden">
+                    <h2 class="text-2xl font-bold mb-8 dark:text-white border-b pb-4">My Notifications</h2>
+                    <div class="mb-6 bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg text-blue-800 dark:text-blue-300 text-sm flex items-start">
+                        <i class="fas fa-bell mt-1 mr-3 text-lg"></i>
+                        <p>Atur preferensi notifikasi dan alert pada sistem. (Simulasi)</p>
+                    </div>
+
+                    <form class="space-y-6 w-full">
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
+                            <div>
+                                <h4 class="font-medium text-gray-800 dark:text-gray-200">Email Notifications</h4>
+                                <p class="text-sm text-gray-500">Terima pemberitahuan saat kelembaban tanah kritis</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" value="" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
+                            <div>
+                                <h4 class="font-medium text-gray-800 dark:text-gray-200">Daily Report</h4>
+                                <p class="text-sm text-gray-500">Terima ringkasan prediksi LSTM harian via email</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" value="" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        <div class="pt-4">
+                            <button type="button" onclick="showToast('Pengaturan notifikasi disimpan!')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow transition flex items-center">
+                                <i class="fas fa-save mr-2"></i> Simpan Pengaturan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-green-800 text-white px-6 py-3 rounded-lg shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center">
+        <i class="fas fa-check-circle mr-3 text-xl"></i>
+        <span id="toast-msg" class="font-medium">Perubahan berhasil disimpan!</span>
+    </div>
+
+    <!-- Crop Modal -->
+    <div id="crop-modal" class="fixed inset-0 z-[100] bg-black/80 hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div id="crop-modal-content" class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-lg w-full p-6 transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-start mb-4 border-b border-gray-200 dark:border-gray-700 pb-3">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Potong Foto Profil</h2>
+                <button type="button" id="close-crop-modal" class="text-gray-500 hover:text-red-500 text-3xl leading-none font-bold">&times;</button>
+            </div>
+            <div class="w-full max-h-[60vh] overflow-hidden bg-gray-100 flex justify-center items-center rounded-lg">
+                <img id="image-to-crop" src="" alt="Crop" class="max-w-full max-h-full block">
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" id="btn-cancel-crop" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-medium transition">Batal</button>
+                <button type="button" id="btn-save-crop" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium shadow transition flex items-center"><i class="fas fa-crop-alt mr-2"></i> Potong & Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="js/vendor/firebase-app.js"></script>
+    <script src="js/vendor/firebase-auth.js"></script>
+    <script src="js/vendor/firebase-database.js"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Cropper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <!-- Shared Modules -->
+    <script src="js/config.js?v=20260524"></script>
+    <script src="js/security.js?v=20260524"></script>
+    <script src="js/auth.js?v=20260524"></script>
+    <script src="js/firebase-init.js?v=20260524"></script>
+
+    <!-- Settings Logic -->
+    <script src="js/settings.js?v=20260524"></script>
+</body>
+</html>

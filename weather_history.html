@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Prakiraan Cuaca â€” AgroSense</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        green: { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d', },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css?v=202605131113">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="p-4 md:p-6 bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div class="container mx-auto max-w-5xl">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6 bg-white dark:bg-gray-800 p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div class="flex items-center">
+                <a href="index.html" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 p-2 md:p-3 rounded-lg mr-4 transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white font-heading">Riwayat Cuaca</h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Arsip prakiraan cuaca satelit harian</p>
+                </div>
+            </div>
+            
+            <!-- Dark Mode Toggle -->
+            <button id="theme-toggle" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+        </div>
+
+        <!-- Filter & Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="card p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-blue-100 dark:border-gray-700 md:col-span-2">
+                <div class="flex items-center text-blue-600 dark:text-blue-400 mb-2">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <h3 class="font-bold">Informasi Arsip</h3>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Data ini secara otomatis disimpan setiap hari oleh sistem <i>backend</i> <b>AgroSense</b>. Data historis cuaca ini kemudian akan digunakan oleh <b>Mesin AI LSTM</b> untuk melatih ulang akurasi prediksi kebutuhan air secara berkala.</p>
+            </div>
+            <div class="card p-5 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-md text-white flex flex-col justify-center items-center">
+                <i class="fas fa-database text-3xl mb-2 opacity-80"></i>
+                <div class="text-3xl font-bold font-heading mb-1" id="total-records">-</div>
+                <div class="text-sm font-medium opacity-90">Total Rekaman Tersimpan</div>
+            </div>
+        </div>
+
+        <!-- History Content -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden min-h-[400px] relative">
+            
+            <!-- Loading Indicator -->
+            <div id="loading-state" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 dark:bg-gray-800/80 z-10 backdrop-blur-sm">
+                <i class="fas fa-circle-notch fa-spin text-4xl text-green-500 mb-4"></i>
+                <p class="text-gray-600 dark:text-gray-300 font-medium">Mengambil data historis dari server...</p>
+            </div>
+
+            <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-gray-800 dark:text-white"><i class="fas fa-history text-gray-400 mr-2"></i>Daftar Arsip Harian</h2>
+                
+                <div class="flex space-x-2">
+                    <button id="btn-refresh" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-sync-alt mr-1"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Accordion List -->
+            <div id="history-container" class="divide-y divide-gray-100 dark:divide-gray-700">
+                <!-- Injected via JS -->
+            </div>
+            
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-gray-500 dark:text-gray-400">
+                <i class="fas fa-box-open text-5xl mb-4 text-gray-300 dark:text-gray-600"></i>
+                <p class="text-lg font-medium">Belum ada riwayat cuaca tersimpan.</p>
+                <p class="text-sm mt-1">Data akan otomatis dicatat oleh sistem backend setiap hari.</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="js/vendor/firebase-app.js"></script>
+    <script src="js/vendor/firebase-auth.js"></script>
+    <script src="js/vendor/firebase-database.js"></script>
+    
+    <!-- Shared Modules -->
+    <script src="js/config.js?v=20260524"></script>
+    <script src="js/security.js?v=20260524"></script>
+    <script src="js/auth.js?v=20260524"></script>
+    <script src="js/theme.js?v=20260524"></script>
+    <script src="js/firebase-init.js?v=20260524"></script>
+
+    <!-- Weather History Logic -->
+    <script src="js/weather-history.js?v=20260524"></script>
+</body>
+</html>

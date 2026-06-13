@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — AgroSense</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800&family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="p-4 md:p-6 bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div class="container mx-auto max-w-4xl">
+        <!-- Header -->
+        <header class="header-bg card p-4 mb-6 flex justify-between items-center rounded-xl shadow-md">
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="bg-white/20 p-2 rounded-full hover:bg-white/30 transition text-white mr-2">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1 class="text-xl md:text-2xl font-bold">
+                    <i class="fas fa-info-circle mr-2"></i>About System
+                </h1>
+            </div>
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="bg-blue-800 text-white p-2 md:p-3 rounded-full hover:bg-blue-900 transition shadow-lg">
+                <i id="theme-icon" class="fas fa-moon md:text-xl"></i>
+            </button>
+        </header>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-10 mb-6 text-gray-800 dark:text-gray-200">
+            <div class="text-center mb-8">
+                <div class="w-24 h-24 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-500 shadow-lg">
+                    <i class="fas fa-seedling text-5xl text-green-600 dark:text-green-400"></i>
+                </div>
+                <h2 class="text-3xl leading-tight mb-2 uppercase" style="font-family: 'Montserrat', sans-serif; font-weight: 800;">AgroSense</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400" style="font-family: 'Poppins', sans-serif; font-weight: 500;">Smart Irrigation Monitoring System · v2.1</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="text-xl font-bold mb-2">Tentang Aplikasi</h3>
+                    <p class="leading-relaxed">AgroSense adalah platform dashboard cerdas yang dirancang untuk membantu pemantauan iklim mikro dan kelembaban tanah sawah tadah hujan secara real-time. Sistem ini dilengkapi dengan integrasi model kecerdasan buatan (LSTM) untuk memprediksi kebutuhan pengairan lahan berdasarkan data cuaca historis dan prediksi AccuWeather.</p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="text-xl font-bold mb-2">Teknologi Utama</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Frontend:</strong> HTML5, Tailwind CSS, Chart.js, React (untuk komponen tabel)</li>
+                        <li><strong>Backend & Database:</strong> Firebase Realtime Database & Firebase Hosting</li>
+                        <li><strong>AI / Machine Learning:</strong> Python, TensorFlow (Model LSTM)</li>
+                        <li><strong>Hardware:</strong> ESP32 TTGO T-Call (GPRS/WiFi), Sensor DHT22, Sensor FC-28</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-yellow-500 pl-4">
+                    <h3 class="text-xl font-bold mb-2">Tim Pengembang</h3>
+                    <p class="leading-relaxed">Dikembangkan untuk keperluan penelitian akademik terapan dalam meningkatkan produktivitas pertanian sawah tadah hujan melalui pendekatan Internet of Things dan Machine Learning.</p>
+                </div>
+            </div>
+
+            <div class="mt-10 text-center border-t border-gray-200 dark:border-gray-700 pt-6">
+                <p class="text-sm text-gray-500">© <script>document.write(new Date().getFullYear())</script> AgroSense · Smart Irrigation Monitoring System. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="js/vendor/firebase-app.js"></script>
+    <script src="js/vendor/firebase-auth.js"></script>
+
+    <!-- Shared Modules -->
+    <script src="js/config.js?v=20260524"></script>
+    <script src="js/security.js?v=20260524"></script>
+    <script src="js/firebase-init.js?v=20260524"></script>
+    <script src="js/auth.js?v=20260524"></script>
+    <script src="js/theme.js?v=20260524"></script>
+
+    <script>
+        // Inisialisasi Firebase agar Auth bisa bekerja
+        initFirebase();
+        AgroAuth.requireAuth();
+        AgroTheme.init();
+    </script>
+</body>
+</html>
+

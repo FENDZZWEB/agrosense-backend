@@ -1,0 +1,49 @@
+{
+  "rules": {
+    "sensor_data": {
+      ".read": true,
+      ".write": true,
+      "$device_id": {
+        ".validate": "newData.hasChildren(['temperature', 'humidity', 'soil_moisture', 'timestamp'])"
+      }
+    },
+    "sensor_history": {
+      ".read": "auth != null",
+      ".write": true
+    },
+    "fields": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "dashboard_settings": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "calibration": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "weather_forecast": {
+      ".read": true,
+      ".write": true
+    },
+    "historical_weather": {
+      ".read": "auth != null",
+      ".write": true
+    },
+    "ai_predictions": {
+      ".read": "auth != null",
+      ".write": true
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    },
+    "admin_logs": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
