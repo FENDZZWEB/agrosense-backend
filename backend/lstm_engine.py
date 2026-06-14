@@ -4,6 +4,10 @@ import requests
 import schedule
 import time
 import datetime
+
+# Timezone WIB (UTC+8) — agar tanggal selalu dihitung berdasarkan waktu Indonesia
+# bukan waktu server (GitHub Actions = UTC)
+WIB = datetime.timezone(datetime.timedelta(hours=8))
 import json
 import os
 import numpy as np
@@ -66,14 +70,15 @@ except Exception as e:
 
 def fetch_and_store_weather():
     """Mengambil data dari AccuWeather dan menyimpannya sebagai data historis"""
-    print(f"[{datetime.datetime.now()}] Memulai penarikan data cuaca...")
+    now_wib = datetime.datetime.now(WIB)
+    print(f"[{now_wib.strftime('%Y-%m-%d %H:%M:%S')} WIB] Memulai penarikan data cuaca...")
     url = f"https://dataservice.accuweather.com/forecasts/v1/daily/5day/{AW_LOCATION_KEY}?apikey={AW_API_KEY}&metric=true"
     
     try:
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            today_date = datetime.datetime.now().strftime("%Y-%m-%d")
+            today_date = now_wib.strftime("%Y-%m-%d")
             
             # Simpan ke node historical_weather/YYYY-MM-DD
             db.reference(f'historical_weather/{today_date}').set(data)
@@ -96,7 +101,8 @@ def fetch_and_store_weather():
 
 def run_lstm_prediction():
     """Menarik data historis dari Firebase, memproses LSTM, lalu push hasilnya"""
-    print(f"[{datetime.datetime.now()}] Memulai perhitungan AI LSTM...")
+    now_wib = datetime.datetime.now(WIB)
+    print(f"[{now_wib.strftime('%Y-%m-%d %H:%M:%S')} WIB] Memulai perhitungan AI LSTM...")
     
     try:
         # 1. Ambil daftar semua sawah yang terdaftar di Firebase
@@ -105,7 +111,7 @@ def run_lstm_prediction():
             print("[-] Tidak ada data sawah di database (fields kosong).")
             return
 
-        today_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        today_date = now_wib.strftime("%Y-%m-%d")
         
         # 2. Ambil seluruh sensor_data untuk cross-check
         all_sensor_data = db.reference('sensor_data').get() or {}
@@ -175,7 +181,7 @@ def run_lstm_prediction():
             if plant_date_str:
                 try:
                     plant_date_obj = datetime.datetime.strptime(plant_date_str, "%Y-%m-%d").date()
-                    today_obj = datetime.datetime.now().date()
+                    today_obj = now_wib.date()
                     umur_tanaman_hari = (today_obj - plant_date_obj).days
                     
                     if umur_tanaman_hari < 0:
