@@ -15,8 +15,8 @@ SERVICE_ACCOUNT_KEY = os.environ.get("FIREBASE_KEY_PATH", "serviceAccountKey.jso
 
 # Paths — model & dataset sekarang ada di dalam folder backend/
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATASET_PATH = os.path.join(BASE_DIR, "dataset_sawah_cleaned.csv")
-MODEL_PATH = os.path.join(BASE_DIR, "model_lstm_sawah.h5")
+DATASET_PATH = os.path.join(BASE_DIR, "dataset_sawah_apr_jun_2026.csv")
+MODEL_PATH = os.path.join(BASE_DIR, "model_lstm_apr_jun.h5")
 
 # LSTM Configuration
 FEATURES = ['Suhu', 'Kelembapan_Udara', 'Kelembapan_Tanah', 'Curah_Hujan']

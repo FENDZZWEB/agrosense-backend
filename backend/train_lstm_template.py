@@ -13,7 +13,7 @@ import math
 # Ganti nama file ini dengan dataset asli Anda.
 # Format kolom yang disarankan: Tanggal, Suhu, Kelembapan_Udara, Kelembapan_Tanah, Curah_Hujan, Target_Kebutuhan_Air_mm
 print("[1] Membaca Dataset Asli dari Kaggle...")
-df = pd.read_csv("dataset_sawah_cleaned.csv", index_col="Tanggal", parse_dates=True)
+df = pd.read_csv("dataset_sawah_apr_jun_2026.csv", index_col="Tanggal", parse_dates=True)
 
 # Pastikan urutan berdasar tanggal
 df = df.sort_index()
@@ -103,7 +103,7 @@ for i in range(1, 6):
     
     # Simpan model terbaik (misal iterasi terakhir)
     if i == 5:
-        model.save('model_lstm_sawah.h5')
+        model.save('model_lstm_apr_jun.h5')
         # Simpan grafik terakhir
         plt.figure(figsize=(10, 5))
         plt.plot(history.history['loss'], label='Training Loss')
@@ -125,4 +125,4 @@ for idx, (m, r) in enumerate(zip(all_mae, all_rmse)):
 print("-" * 45)
 print(f"RATA-RATA       | {np.mean(all_mae):<12.4f} | {np.mean(all_rmse):<12.4f}")
 print("="*45)
-print("[+] Selesai! Model final disimpan sebagai 'model_lstm_sawah.h5'")
+print("[+] Selesai! Model final disimpan sebagai 'model_lstm_apr_jun.h5'")
