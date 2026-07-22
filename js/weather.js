@@ -57,64 +57,60 @@ const AgroWeather = {
     },
 
     /**
-     * Fetch weather data from AccuWeather with caching.
-     * Pushes data to Firebase for LSTM backend consumption.
+     * Fetch weather data - Firebase first (from Python backend), then localStorage cache, then AccuWeather direct.
+     * Strategi ini menghindari masalah CORS saat diakses dari Firebase Hosting.
      * @param {firebase.database.Database} database - Firebase database instance
      * @returns {Promise<object|null>}
      */
     async fetchForecast(database) {
+        const now = Date.now();
+        const FIREBASE_STALE_MS = 12 * 60 * 60 * 1000; // 12 jam
+
+        // === LANGKAH 1: Baca dari Firebase (di-push oleh backend Python, bebas CORS) ===
         try {
-            // Check cache first
-            const cachedData = localStorage.getItem('aw_forecast');
-            const cachedTime = localStorage.getItem('aw_forecast_time');
-            const now = Date.now();
-
-            if (cachedData && cachedTime && (now - parseInt(cachedTime) < APP_CONSTANTS.WEATHER_CACHE_MS)) {
-                console.log('Menggunakan data cuaca dari cache (AccuWeather)');
-                const parsedData = JSON.parse(cachedData);
-
-                // Still push to Firebase from cache (for LSTM)
-                try {
-                    database.ref('weather_forecast').set({
-                        timestamp: now,
-                        updated_at: new Date().toISOString(),
-                        forecast_data: parsedData,
-                        note: "from_cache"
-                    });
-                } catch (e) { /* silent */ }
-
-                return parsedData;
+            const snapshot = await database.ref('weather_forecast').once('value');
+            const fbData = snapshot.val();
+            if (fbData && fbData.forecast_data && fbData.timestamp &&
+                (now - fbData.timestamp) < FIREBASE_STALE_MS) {
+                console.log('[Cuaca] Data dari Firebase (backend Python). Diperbarui:', fbData.updated_at);
+                localStorage.setItem('aw_forecast', JSON.stringify(fbData.forecast_data));
+                localStorage.setItem('aw_forecast_time', now.toString());
+                return fbData.forecast_data;
             }
+        } catch (fbReadError) {
+            console.warn('[Cuaca] Gagal baca Firebase, coba AccuWeather langsung...', fbReadError);
+        }
 
-            console.log('Mengambil data cuaca terbaru dari AccuWeather...');
+        // === LANGKAH 2: Cek localStorage cache ===
+        const cachedData = localStorage.getItem('aw_forecast');
+        const cachedTime = localStorage.getItem('aw_forecast_time');
+        if (cachedData && cachedTime && (now - parseInt(cachedTime) < APP_CONSTANTS.WEATHER_CACHE_MS)) {
+            console.log('[Cuaca] Data dari cache lokal (localStorage).');
+            return JSON.parse(cachedData);
+        }
+
+        // === LANGKAH 3: Panggil AccuWeather langsung (fallback, mungkin gagal di Firebase Hosting karena CORS) ===
+        try {
+            console.log('[Cuaca] Mengambil data langsung dari AccuWeather...');
             const url = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${AW_LOCATION_KEY}?apikey=${AW_API_KEY}&metric=true`;
-
             const response = await fetch(url);
             if (!response.ok) {
-                throw new Error('Gagal mengambil data dari AccuWeather. HTTP Status: ' + response.status);
+                throw new Error('HTTP Status: ' + response.status);
             }
-
             const data = await response.json();
-
-            // Save to cache
             localStorage.setItem('aw_forecast', JSON.stringify(data));
             localStorage.setItem('aw_forecast_time', now.toString());
-
-            // Push to Firebase for LSTM
             try {
                 database.ref('weather_forecast').set({
                     timestamp: now,
                     updated_at: new Date().toISOString(),
-                    forecast_data: data
+                    forecast_data: data,
+                    source: 'frontend_direct'
                 });
-                console.log('Data prakiraan cuaca berhasil di-push ke Firebase untuk LSTM.');
-            } catch (fbError) {
-                console.error('Gagal mem-push data cuaca ke Firebase:', fbError);
-            }
-
+            } catch (fbError) { /* silent */ }
             return data;
         } catch (error) {
-            console.error('Error fetching AccuWeather:', error);
+            console.error('[Cuaca] Semua sumber gagal:', error.message);
             return null;
         }
     },
