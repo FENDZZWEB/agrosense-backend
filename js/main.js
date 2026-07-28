@@ -998,17 +998,50 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Loop semua sawah yang ada di ai_predictions
             for (const [fieldId, fieldData] of Object.entries(data)) {
-                if (fieldData.latest) {
+
+                // Cek apakah format baru tersedia (day_1 s/d day_5)
+                const hasDay1 = fieldData.day_1 !== undefined;
+
+                if (hasDay1) {
+                    // Format baru: baca day_1 sampai day_5
+                    for (let d = 1; d <= 5; d++) {
+                        const p = fieldData[`day_${d}`];
+                        if (!p) continue;
+
+                        let category = "Tidak Perlu Pengairan";
+                        if (p.kebutuhan_air_liter > 500) category = "Pengairan Tinggi";
+                        else if (p.kebutuhan_air_liter > 100) category = "Pengairan Sedang";
+                        else if (p.kebutuhan_air_liter > 0) category = "Pengairan Rendah";
+
+                        const rec = p.rekomendasi_pompa === "ON"
+                            ? "Nyalakan pompa air sekarang."
+                            : "Pompa tidak perlu dinyalakan.";
+
+                        predictionsList.push({
+                            date: `${p.date} - ${p.field_name || fieldId}`,
+                            hari_ke: d,
+                            fase: p.fase_tumbuh || '-',
+                            water: p.kebutuhan_air_liter,
+                            category: category,
+                            recommendation: rec
+                        });
+                    }
+                } else if (fieldData.latest) {
+                    // Format lama: fallback ke node latest (1 hari saja)
                     const p = fieldData.latest;
                     let category = "Tidak Perlu Pengairan";
-                    if (p.kebutuhan_air_liter > 500) category = "Pengairan Tinggi"; // Disesuaikan skala liter sawah
+                    if (p.kebutuhan_air_liter > 500) category = "Pengairan Tinggi";
                     else if (p.kebutuhan_air_liter > 100) category = "Pengairan Sedang";
                     else if (p.kebutuhan_air_liter > 0) category = "Pengairan Rendah";
-                    
-                    let rec = p.rekomendasi_pompa === "ON" ? "Nyalakan pompa air sekarang." : "Pompa tidak perlu dinyalakan.";
-                    
+
+                    const rec = p.rekomendasi_pompa === "ON"
+                        ? "Nyalakan pompa air sekarang."
+                        : "Pompa tidak perlu dinyalakan.";
+
                     predictionsList.push({
                         date: `${p.date} - ${p.field_name || fieldId}`,
+                        hari_ke: 1,
+                        fase: p.fase_tumbuh || '-',
                         water: p.kebutuhan_air_liter,
                         category: category,
                         recommendation: rec

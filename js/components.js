@@ -1,4 +1,4 @@
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 function PredictionTable() {
     const [predictions, setPredictions] = useState(
@@ -6,6 +6,12 @@ function PredictionTable() {
             { date: 'Memuat...', water: 0, category: 'Memuat...', recommendation: 'Harap tunggu...' }
         ]
     );
+    const [isPredicting, setIsPredicting] = useState(false);
+    const isPredictingRef = useRef(false);
+
+    useEffect(() => {
+        isPredictingRef.current = isPredicting;
+    }, [isPredicting]);
     
     useEffect(() => {
         // Cek jika data sudah ada saat komponen baru di-mount
@@ -21,15 +27,62 @@ function PredictionTable() {
         
         // Listener dari event yang di-dispatch oleh main.js
         window.addEventListener('dashboardDataFetched', handleDataFetched);
+
+        // Listener untuk status prediksi ulang dari Firebase Realtime Database
+        const dbInstance = initFirebase();
+        const triggerRef = dbInstance.ref('prediction_trigger');
+        
+        const handleTriggerChange = (snapshot) => {
+            const val = snapshot.val();
+            if (val) {
+                if (val.status === 'pending' || val.status === 'running') {
+                    setIsPredicting(true);
+                } else {
+                    setIsPredicting(false);
+                    if (val.status === 'success') {
+                        if (isPredictingRef.current) {
+                            if (typeof window.addLogEntry === 'function') {
+                                window.addLogEntry('Prediksi ulang selesai dihitung oleh AI Engine!', 'success');
+                            }
+                        }
+                    } else if (val.status === 'error') {
+                        if (isPredictingRef.current) {
+                            if (typeof window.addLogEntry === 'function') {
+                                window.addLogEntry(`Gagal prediksi ulang: ${val.error_message || 'Error tidak diketahui'}`, 'danger');
+                            }
+                            alert(`Error AI Engine: ${val.error_message || 'Error tidak diketahui'}`);
+                        }
+                    }
+                }
+            }
+        };
+
+        triggerRef.on('value', handleTriggerChange);
         
         return () => {
             window.removeEventListener('dashboardDataFetched', handleDataFetched);
+            triggerRef.off('value', handleTriggerChange);
         };
     }, []);
     
     const handleRepredict = () => {
-        // Tampilkan notifikasi
-        alert('Fitur prediksi ulang (machine learning) sedang diproses oleh backend...');
+        const currentRole = sessionStorage.getItem('current_role');
+        if (currentRole === 'tester') {
+            alert('Akses Ditolak: Akun Tester tidak memiliki izin untuk memicu prediksi manual.');
+            return;
+        }
+
+        // Tampilkan konfirmasi untuk membuka GitHub Actions
+        const confirmGoToGithub = window.confirm(
+            "Prediksi AI sekarang sepenuhnya diotomatisasi di Cloud (GitHub Actions).\n\n" +
+            "Sistem akan memprediksi secara otomatis setiap jam 06.00 Pagi.\n" +
+            "Jika Anda benar-benar butuh memicu prediksi sekarang, silakan tekan 'Run workflow' pada halaman Actions di GitHub Anda.\n\n" +
+            "Apakah Anda ingin membuka halaman GitHub Actions sekarang?"
+        );
+
+        if (confirmGoToGithub) {
+            window.open('https://github.com/FENDZZWEB/agrosense-backend/actions/workflows/daily_prediction.yml', '_blank');
+        }
     };
     
     const handleExport = async () => {
@@ -168,7 +221,9 @@ function PredictionTable() {
                     <table className="w-full">
                         <thead className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                             <tr>
-                                <th className="p-3 text-left font-bold">Tanggal</th>
+                                <th className="p-3 text-center font-bold">Hari ke-</th>
+                                <th className="p-3 text-left font-bold">Tanggal / Sawah</th>
+                                <th className="p-3 text-left font-bold">Fase Tumbuh</th>
                                 <th className="p-3 text-left font-bold">Prediksi Kebutuhan Air</th>
                                 <th className="p-3 text-left font-bold">Kategori Pengairan</th>
                                 <th className="p-3 text-left font-bold">Rekomendasi</th>
@@ -177,7 +232,13 @@ function PredictionTable() {
                         <tbody>
                             {predictions.map((pred, index) => (
                                 <tr key={index} className="table-row border-b border-gray-200">
+                                    <td className="p-3 text-center font-bold text-blue-600">
+                                        {pred.hari_ke ? `Hari ${pred.hari_ke}` : '-'}
+                                    </td>
                                     <td className="p-3 font-medium">{pred.date}</td>
+                                    <td className="p-3 text-sm text-gray-600 dark:text-gray-300">
+                                        {pred.fase || '-'}
+                                    </td>
                                     <td className="p-3 font-bold">{pred.water} L</td>
                                     <td className="p-3">
                                         <span className={`px-3 py-1 rounded-full text-sm font-bold ${getCategoryClass(pred.category)}`}>
@@ -199,9 +260,11 @@ function PredictionTable() {
                 <div className="mt-6 flex flex-wrap gap-4">
                     <button 
                         onClick={handleRepredict}
-                        className="btn-primary flex items-center"
+                        disabled={isPredicting}
+                        className={`btn-primary flex items-center ${isPredicting ? 'opacity-60 cursor-not-allowed' : ''}`}
                     >
-                        <i className="fas fa-sync-alt mr-2"></i>PREDIKSI ULANG
+                        <i className={`fas ${isPredicting ? 'fa-spinner fa-spin' : 'fa-sync-alt'} mr-2`}></i>
+                        {isPredicting ? 'MEMPROSES PREDIKSI...' : 'PREDIKSI ULANG'}
                     </button>
                     <button 
                         onClick={handleExport}
