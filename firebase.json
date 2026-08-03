@@ -8,13 +8,14 @@
       "**/node_modules/**",
       "esp32_firmware/**",
       "backend/**",
-      "*.bat",
-      "*.csv",
-      "*.h5",
-      "*.pdf",
-      "*.txt",
-      "*.py",
-      "*.ps1"
+      "trash/**",
+      "**/*.bat",
+      "**/*.csv",
+      "**/*.h5",
+      "**/*.pdf",
+      "**/*.txt",
+      "**/*.py",
+      "**/*.ps1"
     ],
     "headers": [
       {

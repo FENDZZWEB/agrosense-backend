@@ -135,13 +135,17 @@ void setup() {
   Serial.println("Menghubungkan ke Jaringan Seluler...");
   if (!modem.waitForNetwork()) {
     Serial.println("Gagal terhubung ke jaringan seluler!");
-    while (true); // Berhenti jika gagal
+    Serial.println("Mencoba ulang dalam 5 detik...");
+    delay(5000);
+    ESP.restart();
   }
 
   Serial.println("Terhubung ke Jaringan. Mengaktifkan GPRS...");
   if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
     Serial.println("Gagal mengaktifkan GPRS!");
-    while (true);
+    Serial.println("Mencoba ulang dalam 5 detik...");
+    delay(5000);
+    ESP.restart();
   }
   
   // Tampilkan IP lokal untuk memastikan koneksi GPRS aktif sepenuhnya

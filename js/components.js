@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 function PredictionTable() {
     const [predictions, setPredictions] = useState(
         window.latestAIPredictions || [
-            { date: 'Memuat...', water: 0, category: 'Memuat...', recommendation: 'Harap tunggu...' }
+            { date: 'Memuat...', kai_mm: 0, water: 0, category: 'Memuat...', recommendation: 'Harap tunggu...' }
         ]
     );
     const [isPredicting, setIsPredicting] = useState(false);
@@ -100,13 +100,13 @@ function PredictionTable() {
             const worksheet = workbook.addWorksheet('Data Prediksi Air');
             
             // Tambahkan judul laporan
-            worksheet.mergeCells('A1:E1');
+            worksheet.mergeCells('A1:F1');
             const titleCell = worksheet.getCell('A1');
             titleCell.value = 'LAPORAN PREDIKSI KEBUTUHAN AIR SAWAH TADAH HUJAN';
             titleCell.font = { name: 'Arial', size: 14, bold: true };
             titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
             
-            worksheet.mergeCells('A2:E2');
+            worksheet.mergeCells('A2:F2');
             const subTitleCell = worksheet.getCell('A2');
             subTitleCell.value = 'Dicetak pada: ' + new Date().toLocaleString('id-ID');
             subTitleCell.font = { name: 'Arial', size: 11, italic: true };
@@ -114,18 +114,19 @@ function PredictionTable() {
             
             worksheet.addRow([]); // Baris kosong
             
-            // Tentukan kolom (kunci kolom ini tidak otomatis jadi header di ExcelJS untuk addRow array)
+            // Tentukan kolom
             worksheet.columns = [
                 { key: 'no', width: 5 },
-                { key: 'date', width: 20 },
-                { key: 'water', width: 25 },
-                { key: 'category', width: 25 },
-                { key: 'recommendation', width: 50 }
+                { key: 'date', width: 22 },
+                { key: 'kai', width: 18 },
+                { key: 'water', width: 22 },
+                { key: 'category', width: 22 },
+                { key: 'recommendation', width: 45 }
             ];
             
             // Header tabel di baris 4
             const headerRow = worksheet.getRow(4);
-            headerRow.values = ['No', 'Tanggal', 'Prediksi Kebutuhan Air', 'Kategori Pengairan', 'Rekomendasi'];
+            headerRow.values = ['No', 'Tanggal / Sawah', 'Prediksi KAI (mm)', 'Volume Air (Liter)', 'Kategori Pengairan', 'Rekomendasi'];
             headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
             headerRow.fill = {
                 type: 'pattern',
@@ -141,13 +142,15 @@ function PredictionTable() {
                 row.values = [
                     index + 1,
                     p.date,
-                    p.water + ' Liter',
+                    (p.kai_mm !== undefined && p.kai_mm !== null ? p.kai_mm : '-') + ' mm',
+                    (p.water !== undefined && p.water !== null ? Number(p.water).toLocaleString('id-ID') : '0') + ' Liter',
                     p.category,
                     p.recommendation
                 ];
                 
                 row.alignment = { vertical: 'middle', wrapText: true };
                 row.getCell('no').alignment = { horizontal: 'center', vertical: 'middle' };
+                row.getCell('kai').alignment = { horizontal: 'center', vertical: 'middle', font: { bold: true } };
                 row.getCell('water').alignment = { horizontal: 'center', vertical: 'middle', font: { bold: true } };
                 
                 // Styling per kategori
@@ -224,7 +227,7 @@ function PredictionTable() {
                                 <th className="p-3 text-center font-bold">Hari ke-</th>
                                 <th className="p-3 text-left font-bold">Tanggal / Sawah</th>
                                 <th className="p-3 text-left font-bold">Fase Tumbuh</th>
-                                <th className="p-3 text-left font-bold">Prediksi Kebutuhan Air</th>
+                                <th className="p-3 text-left font-bold">Prediksi KAI & Volume Air</th>
                                 <th className="p-3 text-left font-bold">Kategori Pengairan</th>
                                 <th className="p-3 text-left font-bold">Rekomendasi</th>
                             </tr>
@@ -239,7 +242,14 @@ function PredictionTable() {
                                     <td className="p-3 text-sm text-gray-600 dark:text-gray-300">
                                         {pred.fase || '-'}
                                     </td>
-                                    <td className="p-3 font-bold">{pred.water} L</td>
+                                    <td className="p-3">
+                                        <div className="font-bold text-gray-900 dark:text-white">
+                                            {pred.kai_mm !== undefined && pred.kai_mm !== null ? `${pred.kai_mm} mm` : '-'}
+                                        </div>
+                                        <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
+                                            {pred.water !== undefined && pred.water !== null ? `(${Number(pred.water).toLocaleString('id-ID')} Liter)` : '(0 Liter)'}
+                                        </div>
+                                    </td>
                                     <td className="p-3">
                                         <span className={`px-3 py-1 rounded-full text-sm font-bold ${getCategoryClass(pred.category)}`}>
                                             {pred.category}

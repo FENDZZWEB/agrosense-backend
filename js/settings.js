@@ -41,8 +41,7 @@ function switchTab(tabId) {
     const tabNames = {
         'profile': 'My Profile',
         'notification': 'My Notifications',
-        'location': 'Location Settings',
-        'calibration': 'Sensor Settings'
+        'location': 'Location Settings'
     };
     const breadcrumb = document.getElementById('breadcrumb-current');
     if (breadcrumb) breadcrumb.textContent = tabNames[tabId] || 'Settings';
@@ -256,52 +255,7 @@ function saveLocation() {
     showToast("Sawah dan Alat IoT berhasil didaftarkan!");
 }
 
-function saveCalibration() {
-    const deviceId = document.getElementById('cal-device-select').value;
-    if (!deviceId) {
-        alert("Silakan pilih alat IoT terlebih dahulu!");
-        return;
-    }
 
-    const tempCal = document.getElementById('cal-temp').value;
-    const humCal = document.getElementById('cal-hum').value;
-    const dryCal = document.getElementById('cal-dry').value;
-    const wetCal = document.getElementById('cal-wet').value;
-
-    database.ref('calibration/' + deviceId).set({
-        tempOffset: tempCal,
-        humOffset: humCal,
-        adcDry: dryCal,
-        adcWet: wetCal
-    });
-
-    showToast("Nilai kalibrasi tersimpan ke server untuk " + deviceId + "!");
-}
-
-function loadCalibrationData(deviceId) {
-    if (!deviceId) {
-        document.getElementById('cal-temp').value = 0;
-        document.getElementById('cal-hum').value = 0;
-        document.getElementById('cal-dry').value = 4095;
-        document.getElementById('cal-wet').value = 1500;
-        return;
-    }
-
-    database.ref('calibration/' + deviceId).once('value').then(snapshot => {
-        const data = snapshot.val();
-        if (data) {
-            document.getElementById('cal-temp').value = data.tempOffset || 0;
-            document.getElementById('cal-hum').value = data.humOffset || 0;
-            document.getElementById('cal-dry').value = data.adcDry || 4095;
-            document.getElementById('cal-wet').value = data.adcWet || 1500;
-        } else {
-            document.getElementById('cal-temp').value = 0;
-            document.getElementById('cal-hum').value = 0;
-            document.getElementById('cal-dry').value = 4095;
-            document.getElementById('cal-wet').value = 1500;
-        }
-    });
-}
 
 function editField(id) {
     database.ref('fields/' + id).once('value').then((snapshot) => {
@@ -442,23 +396,14 @@ window.onload = () => {
                     map.setView(newLatLng);
                 }
             }
-            if (data.calibration) {
-                document.getElementById('cal-temp').value = data.calibration.tempOffset || 0;
-                document.getElementById('cal-hum').value = data.calibration.humOffset || 0;
-                document.getElementById('cal-dry').value = data.calibration.adcDry || 4095;
-                document.getElementById('cal-wet').value = data.calibration.adcWet || 1500;
-            }
         }
     });
 
-    // Dengarkan daftar Sawah (fields)
     database.ref('fields').on('value', snapshot => {
         const fieldsData = snapshot.val();
         const tbody = document.getElementById('fields-table-body');
-        const calSelect = document.getElementById('cal-device-select');
 
         if (tbody) tbody.innerHTML = '';
-        if (calSelect) calSelect.innerHTML = '<option value="">-- Pilih Alat --</option>';
 
         if (fieldsData) {
             for (const [id, data] of Object.entries(fieldsData)) {
@@ -477,14 +422,6 @@ window.onload = () => {
                         </td>
                     `;
                     tbody.appendChild(tr);
-                }
-
-                // Populate Calibration Dropdown
-                if (calSelect && data.device_id) {
-                    const option = document.createElement('option');
-                    option.value = data.device_id;
-                    option.textContent = `${data.device_id} (Lokasi: ${data.name})`;
-                    calSelect.appendChild(option);
                 }
             }
         } else {

@@ -52,9 +52,6 @@
                     <button onclick="switchTab('location')" id="tab-btn-location" class="tab-btn w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                         <i class="fas fa-map-marker-alt w-5 mr-2 opacity-70"></i> Location Settings
                     </button>
-                    <button onclick="switchTab('calibration')" id="tab-btn-calibration" class="tab-btn w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                        <i class="fas fa-sliders-h w-5 mr-2 opacity-70"></i> Sensor Settings
-                    </button>
                 </nav>
             </div>
         </div>
@@ -199,64 +196,6 @@
                     </div>
                 </div>
 
-                <!-- Tab: Calibration -->
-                <div id="tab-calibration" class="tab-content w-full hidden">
-                    <h2 class="text-2xl font-bold mb-8 dark:text-white border-b pb-4">Sensor Settings</h2>
-                    <div class="mb-6 bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded-lg text-yellow-800 dark:text-yellow-300 text-sm flex items-start">
-                        <i class="fas fa-exclamation-triangle mt-1 mr-3 text-lg"></i>
-                        <p>Ubah nilai kalibrasi ini jika terdapat selisih pembacaan antara sensor dengan alat ukur standar. Nilai ini akan disimpan di Firebase dan diaplikasikan langsung ke data dashboard.</p>
-                    </div>
-
-                    <div class="mb-6">
-                        <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Pilih Alat IoT (Sensor) yang akan dikalibrasi:</label>
-                        <select id="cal-device-select" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white bg-white" onchange="loadCalibrationData(this.value)">
-                            <option value="">-- Memuat Daftar Alat... --</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-6 max-w-2xl">
-                        <!-- DHT22 Calibration -->
-                        <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg border border-gray-200 dark:border-gray-600">
-                            <h3 class="font-bold text-lg mb-3 flex items-center dark:text-white">
-                                <i class="fas fa-temperature-half text-orange-500 mr-2"></i> Kalibrasi DHT22 (Suhu & Kelembaban Udara)
-                            </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Suhu Offset (Â°C)</label>
-                                    <input type="number" step="0.1" id="cal-temp" value="0.0" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Kelembaban Udara Offset (%)</label>
-                                    <input type="number" step="1" id="cal-hum" value="0" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- FC-28 Calibration -->
-                        <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg border border-gray-200 dark:border-gray-600">
-                            <h3 class="font-bold text-lg mb-3 flex items-center dark:text-white">
-                                <i class="fas fa-leaf text-green-500 mr-2"></i> Kalibrasi FC-28 (Kelembaban Tanah)
-                            </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Nilai ADC Udara (Kering 0%)</label>
-                                    <input type="number" id="cal-dry" value="4095" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                                    <p class="text-xs text-gray-500 mt-1">Nilai standar ESP32: 4095</p>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300 text-sm mb-1">Nilai ADC Air (Basah 100%)</label>
-                                    <input type="number" id="cal-wet" value="1500" class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                                    <p class="text-xs text-gray-500 mt-1">Sesuai eksperimen air</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="pt-4">
-                            <button type="button" onclick="saveCalibration()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow transition flex items-center">
-                                <i class="fas fa-sync-alt mr-2"></i> Terapkan Kalibrasi
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Tab: Notification -->

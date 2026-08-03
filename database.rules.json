@@ -44,6 +44,10 @@
     "admin_logs": {
       ".read": "auth != null",
       ".write": "auth != null"
+    },
+    "prediction_trigger": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

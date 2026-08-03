@@ -2,7 +2,7 @@ name: Daily LSTM Irrigation Prediction
 
 on:
   schedule:
-    # Setiap hari jam 06:00 WIB = 22:00 UTC (malam sebelumnya)
+    # Setiap hari jam 06:00 WIB = 22:00 UTC \
     - cron: '0 22 * * *'
   workflow_dispatch:
     # Tombol "Run workflow" manual dari GitHub jika dibutuhkan
@@ -33,7 +33,7 @@ jobs:
         env:
           AW_API_KEY: ${{ secrets.AW_API_KEY }}
           AW_LOCATION_KEY: ${{ secrets.AW_LOCATION_KEY }}
-          RUN_MODE: once
+          RUN_MODE: onc`e
           TF_CPP_MIN_LOG_LEVEL: '3'
         run: |
           cd backend

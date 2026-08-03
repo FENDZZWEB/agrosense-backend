@@ -18,7 +18,7 @@ const FIREBASE_CONFIG = {
 // AccuWeather API Configuration
 // ⚠️ API Key diatur melalui GitHub Secrets untuk backend Python.
 // Untuk development lokal, isi manual di bawah ini.
-const AW_API_KEY = "MASUKKAN_API_KEY_DISINI_UNTUK_DEV_LOKAL";
+const AW_API_KEY = ""; // ⚠️ Set via environment/GitHub Secrets — jangan isi di sini!
 const AW_LOCATION_KEY = "3482444"; // Desa Andoolo Utama, Konawe Selatan
 
 // Application Constants

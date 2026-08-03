@@ -1017,10 +1017,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             ? "Nyalakan pompa air sekarang."
                             : "Pompa tidak perlu dinyalakan.";
 
+                        const kai_mm = p.ai_depth_mm !== undefined && p.ai_depth_mm !== null
+                            ? Number(p.ai_depth_mm).toFixed(2)
+                            : (p.kai_mm !== undefined && p.kai_mm !== null ? Number(p.kai_mm).toFixed(2) : (p.kebutuhan_air_liter ? (p.kebutuhan_air_liter / 1500).toFixed(2) : '0.00'));
+
                         predictionsList.push({
                             date: `${p.date} - ${p.field_name || fieldId}`,
                             hari_ke: d,
                             fase: p.fase_tumbuh || '-',
+                            kai_mm: kai_mm,
                             water: p.kebutuhan_air_liter,
                             category: category,
                             recommendation: rec
@@ -1038,10 +1043,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         ? "Nyalakan pompa air sekarang."
                         : "Pompa tidak perlu dinyalakan.";
 
+                    const kai_mm = p.ai_depth_mm !== undefined && p.ai_depth_mm !== null
+                        ? Number(p.ai_depth_mm).toFixed(2)
+                        : (p.kai_mm !== undefined && p.kai_mm !== null ? Number(p.kai_mm).toFixed(2) : (p.kebutuhan_air_liter ? (p.kebutuhan_air_liter / 1500).toFixed(2) : '0.00'));
+
                     predictionsList.push({
                         date: `${p.date} - ${p.field_name || fieldId}`,
                         hari_ke: 1,
                         fase: p.fase_tumbuh || '-',
+                        kai_mm: kai_mm,
                         water: p.kebutuhan_air_liter,
                         category: category,
                         recommendation: rec

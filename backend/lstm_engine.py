@@ -239,8 +239,8 @@ def run_lstm_prediction():
                             pred_scaled = lstm_model.predict(seq, verbose=0)
                             pred_asli = target_scaler.inverse_transform(pred_scaled)
                             ai_output_mm_i = float(pred_asli[0][0])
-                        except:
-                            pass
+                        except Exception as e:
+                            console.print(f"[yellow][!] Gagal prediksi LSTM hari ke-{i+1}: {e}, fallback ke 5.0mm[/yellow]")
                             
                 ai_output_mm_i = round(max(ai_output_mm_i, 0), 2)
                 ai_output_mm_i = round(ai_output_mm_i * k_c_i, 2)
@@ -296,10 +296,91 @@ def run_lstm_prediction():
 prediction_lock = threading.Lock()
 is_first_trigger_check = True
 
+# ==========================================
+# AGREGASI & CLEANUP SENSOR HISTORY HARIAN
+# ==========================================
+def aggregate_and_cleanup_sensor_history():
+    """
+    Hitung rata-rata harian dari data sensor per jam (sensor_history),
+    simpan hasilnya ke sensor_daily_avg, lalu hapus data jam-an yang sudah diagregasi.
+    Dipanggil otomatis setiap hari oleh daily_job().
+    """
+    now_wib = datetime.datetime.now(WIB)
+    yesterday = (now_wib - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    console.print(f"[yellow][*] Memulai agregasi sensor history untuk tanggal {yesterday}...[/yellow]")
+
+    try:
+        # 1. Ambil seluruh sensor_history dari Firebase
+        history_ref = db.reference('sensor_history/esp32_001')
+        all_history = history_ref.get() or {}
+
+        if not all_history:
+            console.print("[yellow][!] Tidak ada data sensor_history untuk diagregasi.[/yellow]")
+            return
+
+        # 2. Filter hanya record dari hari kemarin
+        yesterday_records = {}
+        for push_id, record in all_history.items():
+            if not isinstance(record, dict):
+                continue
+            ts_ms = record.get('timestamp', 0)
+            try:
+                # Guard: pastikan timestamp sudah diproses Firebase (integer/float)
+                # Jika masih berupa dict {'.sv': 'timestamp'}, berarti belum diproses → skip
+                if not isinstance(ts_ms, (int, float)) or ts_ms == 0:
+                    console.print(f"[yellow][!] Record {push_id} dilewati: timestamp tidak valid ({type(ts_ms).__name__}: {ts_ms})[/yellow]")
+                    continue
+                # timestamp dari Firebase Server dalam milidetik → konversi ke detik
+                dt = datetime.datetime.fromtimestamp(ts_ms / 1000, tz=WIB)
+                if dt.strftime("%Y-%m-%d") == yesterday:
+                    yesterday_records[push_id] = record
+            except Exception as e:
+                console.print(f"[yellow][!] Gagal parsing timestamp record {push_id}: {e}[/yellow]")
+                continue
+
+        if not yesterday_records:
+            console.print(f"[yellow][!] Tidak ada record untuk tanggal {yesterday}, lewati agregasi.[/yellow]")
+            return
+
+        records = list(yesterday_records.values())
+        n = len(records)
+
+        # 3. Hitung rata-rata semua field numerik
+        avg_humidity     = sum(float(r.get('humidity',      0)) for r in records) / n
+        avg_temperature  = sum(float(r.get('temperature',   0)) for r in records) / n
+        avg_soil         = sum(float(r.get('soil_moisture', 0)) for r in records) / n
+
+        # 4. Simpan rata-rata harian ke node baru
+        db.reference(f'sensor_daily_avg/esp32_001/{yesterday}').set({
+            'date':           yesterday,
+            'humidity':       round(avg_humidity,    2),
+            'temperature':    round(avg_temperature, 2),
+            'soil_moisture':  round(avg_soil,        2),
+            'sample_count':   n,
+            'aggregated_at':  int(time.time() * 1000)
+        })
+        console.print(f"[green][+] Rata-rata harian {yesterday} tersimpan ({n} sampel): "
+                      f"Suhu={round(avg_temperature,2)}°C, "
+                      f"Humidity={round(avg_humidity,2)}%, "
+                      f"Soil={round(avg_soil,2)}%[/green]")
+
+        # 5. Hapus record per jam yang sudah diagregasi
+        deleted = 0
+        for push_id in yesterday_records.keys():
+            history_ref.child(push_id).delete()
+            deleted += 1
+
+        console.print(f"[green][+] {deleted} record sensor_history kemarin berhasil dihapus.[/green]")
+
+    except Exception as e:
+        console.print(f"[bold red][-] Gagal agregasi sensor history: {e}[/bold red]")
+
+
 def daily_job():
     """Fungsi yang akan dijalankan otomatis setiap hari"""
     with prediction_lock:
         fetch_and_store_weather()
+        aggregate_and_cleanup_sensor_history()  # Agregasi & cleanup data sensor per jam
         run_lstm_prediction()
         
         # Reset trigger status di Firebase agar frontend tidak stuck 'loading'

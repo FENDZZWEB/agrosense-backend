@@ -49,10 +49,45 @@ const AgroAuth = {
 
     /** Cek apakah user adalah admin. Redirect ke dashboard jika bukan. */
     requireAdmin() {
-        this.requireAuth();
-        if (sessionStorage.getItem('current_role') !== 'admin') {
-            alert('Akses ditolak. Halaman Settings hanya tersedia untuk Administrator.');
-            window.location.replace('index.html');
+        if (document.body) {
+            document.body.style.opacity = '0';
+        }
+
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (!user) {
+                    sessionStorage.clear();
+                    window.location.replace('login.html');
+                } else {
+                    sessionStorage.setItem('agrosense_uid', user.uid);
+
+                    const verifyRole = (role) => {
+                        sessionStorage.setItem('current_role', role);
+                        if (role !== 'admin') {
+                            alert('Akses ditolak. Halaman Settings hanya tersedia untuk Administrator.');
+                            window.location.replace('index.html');
+                        } else {
+                            if (document.body) {
+                                document.body.style.transition = 'opacity 0.25s ease-in-out';
+                                document.body.style.opacity = '1';
+                            }
+                        }
+                    };
+
+                    const savedRole = sessionStorage.getItem('current_role');
+                    if (savedRole) {
+                        verifyRole(savedRole);
+                    } else {
+                        firebase.database().ref('users/' + user.uid + '/role').once('value').then((snap) => {
+                            verifyRole(snap.val() || 'tester');
+                        }).catch(() => {
+                            verifyRole('tester');
+                        });
+                    }
+                }
+            });
+        } else {
+            window.location.replace('login.html');
         }
     },
 

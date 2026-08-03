@@ -8,6 +8,7 @@
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <DHT.h>
+#include <time.h>            // Untuk NTP time sync
 
 // ================= KONFIGURASI WIFI =================
 // Ganti dengan SSID dan Password WiFi Anda
@@ -43,6 +44,13 @@ unsigned long previousPostMillis = 0;
 unsigned long previousHistoryMillis = 0;
 bool isFirstHistory = true;
 
+// ================= KONFIGURASI NTP =================
+// NTP Server untuk sinkronisasi waktu via internet
+const char* ntpServer     = "pool.ntp.org";
+const long  gmtOffset_sec = 28800;   // WIB = UTC+8 = 8 * 3600 detik
+const int   daylightOffset_sec = 0;  // Indonesia tidak pakai daylight saving
+bool ntpSynced = false;
+
 // Variabel Global untuk menyimpan data terakhir
 float currentTemperature = 0;
 float currentHumidity = 0;
@@ -53,6 +61,44 @@ String currentSignalStr = "";
 // ================= VARIABEL STATUS =================
 int reconnectAttempts = 0;
 const int maxReconnectAttempts = 10;
+
+// ================= FUNGSI NTP =================
+void syncNTP() {
+  Serial.println("[*] Sinkronisasi waktu via NTP...");
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+  
+  // Tunggu hingga waktu berhasil disinkronkan (max 10 detik)
+  struct tm timeinfo;
+  int attempts = 0;
+  while (!getLocalTime(&timeinfo) && attempts < 20) {
+    delay(500);
+    Serial.print(".");
+    attempts++;
+  }
+  
+  if (getLocalTime(&timeinfo)) {
+    ntpSynced = true;
+    char buf[32];
+    strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &timeinfo);
+    Serial.print("\n[+] Waktu berhasil disinkronkan: ");
+    Serial.print(buf);
+    Serial.println(" WIB");
+  } else {
+    ntpSynced = false;
+    Serial.println("\n[!] Gagal sinkronisasi NTP, timestamp akan menggunakan millis()");
+  }
+}
+
+// Kembalikan string waktu WIB yang bisa dibaca manusia
+// Format: "2026-08-03 10:41:16 WIB"
+String getDateTimeString() {
+  if (!ntpSynced) return "";
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo)) return "";
+  char buf[32];
+  strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &timeinfo);
+  return String(buf) + " WIB";
+}
 
 void setup() {
   Serial.begin(115200);
@@ -69,6 +115,9 @@ void setup() {
   
   // Mulai koneksi WiFi
   connectWiFi();
+  
+  // Sinkronisasi waktu via NTP setelah WiFi terhubung
+  syncNTP();
 }
 
 void connectWiFi() {
@@ -226,7 +275,15 @@ void sendToFirebase(float soilMoisture, float temperature, float humidity, Strin
   jsonData += "\"battery_level\":100.0,";
   jsonData += "\"signal_strength\":\"" + signalStr + "\",";
   jsonData += "\"connection_type\":\"WiFi\",";
-  jsonData += "\"timestamp\": {\".sv\": \"timestamp\"}";
+  // timestamp_ms: Unix milidetik (untuk perhitungan backend/offline)
+  jsonData += "\"timestamp\": {\".sv\": \"timestamp\"},";
+  // datetime_wib: format terbaca manusia dari NTP ("2026-08-03 10:41:16 WIB")
+  String dtStr = getDateTimeString();
+  if (dtStr.length() > 0) {
+    jsonData += "\"datetime_wib\":\"" + dtStr + "\"";
+  } else {
+    jsonData += "\"datetime_wib\":\"Waktu tidak tersedia (NTP gagal)\"";
+  }
   jsonData += "}";
   
   Serial.print("→ Mengirim ke Firebase... ");
