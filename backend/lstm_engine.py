@@ -73,7 +73,7 @@ def fetch_and_store_weather():
     """Mengambil data dari AccuWeather dan menyimpannya sebagai data historis"""
     now_wib = datetime.datetime.now(WIB)
     print(f"[{now_wib.strftime('%Y-%m-%d %H:%M:%S')} WIB] Memulai penarikan data cuaca...")
-    url = f"https://dataservice.accuweather.com/forecasts/v1/daily/5day/{AW_LOCATION_KEY}?apikey={AW_API_KEY}&metric=true"
+    url = f"https://dataservice.accuweather.com/forecasts/v1/daily/5day/{AW_LOCATION_KEY}?apikey={AW_API_KEY}&metric=true&details=true"
     
     try:
         response = requests.get(url)
