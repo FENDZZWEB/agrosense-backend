@@ -380,7 +380,7 @@ def daily_job():
     """Fungsi yang akan dijalankan otomatis setiap hari"""
     with prediction_lock:
         fetch_and_store_weather()
-        aggregate_and_cleanup_sensor_history()  # Agregasi & cleanup data sensor per jam
+        # aggregate_and_cleanup_sensor_history()  # Agregasi & cleanup data sensor per jam
         run_lstm_prediction()
         
         # Reset trigger status di Firebase agar frontend tidak stuck 'loading'
