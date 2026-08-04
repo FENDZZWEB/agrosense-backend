@@ -33,7 +33,7 @@ DHT dht(DHTPIN, DHTTYPE);
 // - dryValue: nilai analog saat probe di udara (kering)
 // - wetValue: nilai analog saat probe dicelupkan air (basah)
 const int dryValue = 4095;
-const int wetValue = 1500;
+const int wetValue = 1643; // Didapatkan dari kalibrasi asli Serial Monitor saat dicelup air
 
 // ================= PENGATURAN WAKTU =================
 const int readInterval = 2000;   // Baca sensor tiap 2 detik untuk Serial Monitor

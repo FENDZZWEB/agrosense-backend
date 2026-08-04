@@ -55,7 +55,7 @@ DHT dht(DHTPIN, DHTTYPE);
 // Sensor FC-28 (Kelembaban Tanah)
 #define SOIL_MOISTURE_PIN 32
 const int dryValue = 4095;
-const int wetValue = 1500;
+const int wetValue = 1643; // Didapatkan dari kalibrasi asli Serial Monitor saat dicelup air
 
 // ================= WRAPPER CLIENT UNTUK BYPASS DNS GSM =================
 class MyTinyGsmClient : public TinyGsmClient {
